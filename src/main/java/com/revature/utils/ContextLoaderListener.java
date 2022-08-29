@@ -16,8 +16,8 @@ public class ContextLoaderListener implements ServletContextListener {
 
         //TODO Remove TestServlet when done with application
         servletContext.addServlet("TestServlet", new TestServlet()).addMapping("/test");
-        servletContext.addServlet("UserServlet", new UserServlet()).addMapping("/signup");
-        servletContext.addServlet("AuthenticationServlet", new AuthenticationServlet()).addMapping("/login");
+        servletContext.addServlet("UserServlet", new UserServlet()).addMapping("/user/signup");
+        servletContext.addServlet("AuthenticationServlet", new AuthenticationServlet()).addMapping("/user/login");
     }
 
     @Override

@@ -94,12 +94,12 @@ public class UserDAO implements DAO<User> {
 
     public Principal getUserByUsernameAndPassword(String username, String password) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT role_id FROM ers_users WHERE username = ? AND password = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ? AND password = ?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
-                return new Principal(username, UserRole.valueOf(rs.getString("role_id")));
+                return new Principal(username);
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
