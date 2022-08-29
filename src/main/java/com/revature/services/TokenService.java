@@ -1,6 +1,6 @@
 package com.revature.services;
 
-import com.revature.dtos.responses.Principal;
+import com.revature.models.Principal;
 import com.revature.utils.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

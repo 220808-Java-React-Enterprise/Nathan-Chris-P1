@@ -1,4 +1,4 @@
-package com.revature.dtos.responses;
+package com.revature.models;
 
 public class Principal {
     private String username;

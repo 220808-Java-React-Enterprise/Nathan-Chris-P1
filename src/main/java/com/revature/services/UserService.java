@@ -2,14 +2,13 @@ package com.revature.services;
 import com.revature.daos.UserDAO;
 import com.revature.dtos.requests.LoginRequest;
 import com.revature.dtos.requests.NewUserRequest;
-import com.revature.dtos.responses.Principal;
+import com.revature.models.Principal;
 import com.revature.models.User;
+import com.revature.models.UserRole;
 import com.revature.utils.custom_exceptions.AuthenticationException;
 import com.revature.utils.custom_exceptions.InvalidRequestException;
-import com.revature.utils.custom_exceptions.InvalidUserException;
 import com.revature.utils.custom_exceptions.ResourceConflictException;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +32,18 @@ public class UserService {
         validateUsername(request.getUsername());
         validatePassword(request.getPassword());
         checkAvailableUsername(request.getUsername());
-        userDAO.save(new User(request.getUsername(), request.getPassword(), false));
+        userDAO.save(
+                new User(
+                    UUID.randomUUID(),
+                    request.getUsername(),
+                    request.getEmail(),
+                    request.getPassword(),
+                    request.getGiven_name(),
+                    request.getSurname(),
+                    false,
+                    UserRole.valueOf(request.getRole())
+                )
+        );
         return null;
     }
 
