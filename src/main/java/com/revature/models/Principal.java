@@ -1,24 +1,29 @@
 package com.revature.models;
 
+import java.util.UUID;
+
 public class Principal {
     private String username;
-    private boolean isAdmin;
+    private UserRole role;
 
-    public Principal(String username, boolean isAdmin) {
+    public Principal(String username, UserRole role) {
         this.username = username;
-        this.isAdmin = isAdmin;
+        this.role = role;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public UserRole getRole() {
+        return role;
     }
 
     @Override
     public String toString() {
-        return (isAdmin ? "Admin " : "") + username;
+        return "Principal{" +
+                "username=" + username +
+                ", role=" + role +
+                '}';
     }
 }
