@@ -1,6 +1,6 @@
 package com.revature.servlets;
 import com.revature.dtos.requests.LoginRequest;
-import com.revature.dtos.responses.Principal;
+import com.revature.models.Principal;
 import com.revature.services.TokenService;
 import com.revature.services.UserService;
 import com.revature.utils.custom_exceptions.NetworkException;

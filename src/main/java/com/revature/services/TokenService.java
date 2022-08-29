@@ -1,12 +1,14 @@
 package com.revature.services;
 
-import com.revature.dtos.responses.Principal;
+import com.revature.models.Principal;
+import com.revature.models.UserRole;
 import com.revature.utils.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class TokenService {
     private static JwtConfig jwtConfig = new JwtConfig();
@@ -27,7 +29,7 @@ public class TokenService {
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + jwtConfig.getExpiration()))
                 .setSubject(subject.getUsername())
-                .claim("is_admin", subject.isAdmin())
+                .claim("role", subject.getRole().name())
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
         return tokenBuilder.compact();
@@ -40,7 +42,7 @@ public class TokenService {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return new Principal(claims.getId(), claims.get("is_admin", Boolean.class));
+            return new Principal(claims.getId(), UserRole.valueOf(claims.get("role", String.class)));
         } catch (Exception e) {
             return null;
         }
