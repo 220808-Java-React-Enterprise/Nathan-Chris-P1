@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,5 +119,33 @@ public class UserDAO implements DAO<User> {
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return null;
+    }
+
+    public List<User> getAllActiveUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE is_active = 'TRUE'")){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                users.add(getRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return users;
+    }
+
+    public List<User> getAllInactiveUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE is_active = 'FALSE'")){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                users.add(getRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return users;
     }
 }
