@@ -4,6 +4,7 @@ import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.services.TokenService;
 import com.revature.services.UserService;
+import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
 import javax.servlet.ServletException;
@@ -54,4 +55,47 @@ public class UsersServlet extends HttpServlet {
             resp.setStatus(e.getStatusCode());
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            User user = TokenService.extractRequesterDetails(req);
+            if((user.getRole() != UserRole.ADMIN) || !user.isActive()){
+                throw new ForbiddenException("Unauthorized User. Active Admins only.");
+            }
+            if((req.getParameter("action") == null)
+                    || (!(req.getParameter("action").equalsIgnoreCase("password"))
+                        && !(req.getParameter("action").equalsIgnoreCase("activate"))
+                        && !(req.getParameter("action").equalsIgnoreCase("deactivate")))
+            ){
+                throw new BadRequestException("Invalid or missing action for user modification.");
+            }
+            User updateUser;
+            if(req.getParameter("user") == null || req.getParameter("user").equals("")){
+                throw new BadRequestException("User param is required for user modification.");
+            }else{
+                updateUser = UserService.getUserByUsername(req.getParameter("user"));
+                if(updateUser == null){
+                    throw new BadRequestException("No user with username " + req.getParameter("user") + " found. Cannot modify user.");
+                }
+            }
+            switch(req.getParameter("action").toLowerCase()){
+                case "password":
+                    //TODO password reset
+                    break;
+                case "activate":
+                    UserService.activateUser(updateUser);
+                    break;
+                case"deactivate":
+                    UserService.deactivateUser(updateUser);
+                    break;
+            }
+        }catch (NetworkException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(e.getStatusCode());
+        }
+    }
+
+
 }
