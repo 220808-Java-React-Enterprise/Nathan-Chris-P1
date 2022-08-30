@@ -7,6 +7,6 @@ public class AuthenticationException extends NetworkException{
 
     @Override
     public int getStatusCode() {
-        return 403;
+        return 401;
     }
 }
