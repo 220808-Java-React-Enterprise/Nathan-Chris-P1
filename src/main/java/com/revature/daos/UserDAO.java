@@ -1,8 +1,6 @@
 package com.revature.daos;
 
-import com.revature.models.Principal;
-import com.revature.models.User;
-import com.revature.models.UserRole;
+import com.revature.models.*;
 import com.revature.utils.custom_exceptions.InvalidSQLException;
 import com.revature.utils.database.ConnectionFactory;
 
@@ -18,8 +16,8 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public void save(User user) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO ers_users (user_id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO ers_users (user_id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")){
             ps.setString(1, user.getUserID().toString());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getEmail());
@@ -43,21 +41,12 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User getByKey(String key) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM ers_users WHERE user_id = ?");
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM ers_users WHERE user_id = ?")){
             ps.setString(1, key);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(
-                        UUID.fromString(rs.getString("user_id")),
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("given_name"),
-                        rs.getString("surname"),
-                        rs.getBoolean("is_active"),
-                        UserRole.valueOf(rs.getString("role_id"))
-                );
+                return getRow(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,22 +58,11 @@ public class UserDAO implements DAO<User> {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users");
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users")){
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                users.add(
-                        new User(
-                                UUID.fromString(rs.getString("user_id")),
-                                rs.getString("username"),
-                                rs.getString("email"),
-                                rs.getString("password"),
-                                rs.getString("given_name"),
-                                rs.getString("surname"),
-                                rs.getBoolean("is_active"),
-                                UserRole.valueOf(rs.getString("role_id"))
-                        )
-                );
+                users.add(getRow(rs));
             }
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
@@ -93,16 +71,40 @@ public class UserDAO implements DAO<User> {
     }
 
     public Principal getUserByUsernameAndPassword(String username, String password) {
-        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ? AND password = ?");
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ? AND password = ?")){
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
-                return new Principal(username);
+            if (rs.next()) return new Principal(username);
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return null;
+    }
+
+    public boolean isUsernameAvailable(String username) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT username FROM ers_users WHERE username = ?")){
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return true;
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return false;
+    }
+
+    private User getRow(ResultSet rs) throws SQLException {
+        return new User(
+            UUID.fromString(rs.getString("user_id")),
+            rs.getString("username"),
+            rs.getString("email"),
+            rs.getString("password"),
+            rs.getString("given_name"),
+            rs.getString("surname"),
+            rs.getBoolean("is_active"),
+            UserRole.valueOf(rs.getString("role_id"))
+        );
     }
 }
