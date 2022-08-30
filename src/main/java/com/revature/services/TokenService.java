@@ -1,10 +1,11 @@
 package com.revature.services;
 
-import com.revature.models.Principal;
+import com.revature.models.User;
 import com.revature.utils.JwtConfig;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
+import com.revature.utils.custom_exceptions.AuthenticationException;
+import io.jsonwebtoken.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public class TokenService {
@@ -15,32 +16,36 @@ public class TokenService {
     }
 
     public TokenService(JwtConfig jwtConfig) {
-        this.jwtConfig = jwtConfig;
+        TokenService.jwtConfig = jwtConfig;
     }
 
-    public static String generateToken(Principal subject) {
+    public static String generateToken(String username) {
         long now = System.currentTimeMillis();
         JwtBuilder tokenBuilder = Jwts.builder()
-                .setId(subject.getUsername())
+                .setId(username)
                 .setIssuer("nathan-chris-p1")
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + jwtConfig.getExpiration()))
-                .setSubject(subject.getUsername())
+                .setSubject(username)
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
         return tokenBuilder.compact();
     }
 
-    public static Principal extractRequesterDetails(String token) {
+    public static User extractRequesterDetails(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        if((token == null) || (token.isEmpty())){
+            throw new AuthenticationException("No Authorization token provide.");
+        }
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(jwtConfig.getSigningKey())
                     .parseClaimsJws(token)
                     .getBody();
-
-            return new Principal(claims.getId());
-        } catch (Exception e) {
-            return null;
+            return UserService.getUserByUsername(claims.getSubject());
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
+                 IllegalArgumentException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.revature.servlets;
 import com.revature.dtos.requests.LoginRequest;
-import com.revature.models.Principal;
+import com.revature.models.User;
 import com.revature.services.TokenService;
 import com.revature.services.UserService;
 import com.revature.utils.custom_exceptions.NetworkException;
@@ -16,13 +16,14 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            Principal principal = UserService.validateLogin(getMapper().readValue(req.getInputStream(), LoginRequest.class));
+            User user = UserService.validateLogin(getMapper().readValue(req.getInputStream(), LoginRequest.class));
             resp.setStatus(200);
-            resp.setHeader("Authorization", TokenService.generateToken(principal));
+            resp.setHeader("Authorization", TokenService.generateToken(user.getUsername()));
             resp.setContentType("application/json");
-            resp.getWriter().write(getMapper().writeValueAsString(principal));
+            resp.getWriter().write(getMapper().writeValueAsString(user.getUsername()));
         }catch (NetworkException e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             resp.setStatus(e.getStatusCode());
         }
     }

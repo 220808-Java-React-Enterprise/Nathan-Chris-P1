@@ -70,13 +70,13 @@ public class UserDAO implements DAO<User> {
         return users;
     }
 
-    public Principal getUserByUsernameAndPassword(String username, String password) {
+    public User getUserByUsernameAndPassword(String username, String password) {
         try (Connection con = ConnectionFactory.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ? AND password = ?")){
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return new Principal(username);
+            if (rs.next()) return getRow(rs);
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
@@ -106,5 +106,17 @@ public class UserDAO implements DAO<User> {
             rs.getBoolean("is_active"),
             UserRole.valueOf(rs.getString("role_id"))
         );
+    }
+
+    public User getUserByUsername(String username) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ?")){
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return getRow(rs);
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return null;
     }
 }
