@@ -9,12 +9,22 @@ import java.util.Properties;
 
 public class ConnectionFactory {
     private static ConnectionFactory connectionFactory;
-    private Connection connection;
-    
     static{
         try{
             Class.forName("org.postgresql.Driver");
         }catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    private final Properties properties = new Properties();
+
+    private ConnectionFactory() {
+        System.out.println(new File("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties").getAbsolutePath());
+        try {
+            FileReader reader = new FileReader("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties");
+            properties.load(reader);
+            reader.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -25,17 +35,7 @@ public class ConnectionFactory {
     }
 
     public Connection getConnection() throws SQLException {
-        if (connection == null) {
-            Properties properties = new Properties();
-            try {
-                FileReader reader = new FileReader("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties");
-                properties.load(reader);
-                reader.close();
-                connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Connection connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
         if (connection == null) throw new RuntimeException("Could not establish connection with the database!");
         return connection;
     }
