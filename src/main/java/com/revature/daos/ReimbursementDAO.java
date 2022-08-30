@@ -15,21 +15,34 @@ import java.util.UUID;
 public class ReimbursementDAO implements DAO<Reimbursement> {
 
     @Override
-    public void save(Reimbursement reimbursements) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO ers_reimbursements (reimb_id, amount, submitted, resolved, description, receipt, payment_id, author_id, resolver_id, status_id, type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, reimbursements.getReimb_id().toString());
-            ps.setBigDecimal(2, reimbursements.getAmount());
-            ps.setTimestamp(3, reimbursements.getSubmitted());
-            ps.setTimestamp(4, reimbursements.getResolved());
-            ps.setString(5, reimbursements.getDescription());
-            ps.setBytes(6, reimbursements.getReceipt());
-            ps.setString(7, reimbursements.getPayment_id().toString());
-            ps.setString(8, reimbursements.getAuthor_id().toString());
-            ps.setString(9, reimbursements.getResolver_id().toString());
-            ps.setString(10, reimbursements.getStatus_id().toString());
-            ps.setString(11, reimbursements.getType_id().toString());
+    public void save(Reimbursement reimbursement) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO ers_reimbursements (reimb_id, amount, submitted, resolved, description, receipt, payment_id, author_id, resolver_id, status_id, type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            ps.setString(1, reimbursement.getReimb_id().toString());
+            ps.setBigDecimal(2, reimbursement.getAmount());
+            ps.setTimestamp(3, reimbursement.getSubmitted());
+            ps.setTimestamp(4, reimbursement.getResolved());
+            ps.setString(5, reimbursement.getDescription());
+            ps.setBytes(6, reimbursement.getReceipt());
+            ps.setString(7, reimbursement.getPayment_id().toString());
+            ps.setString(8, reimbursement.getAuthor_id().toString());
+            ps.setString(9, reimbursement.getResolver_id().toString());
+            ps.setString(10, reimbursement.getStatus_id().toString());
+            ps.setString(11, reimbursement.getType_id().toString());
             ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
+
+    public void setStatus(Reimbursement reimbursement) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+            PreparedStatement ps = connection.prepareStatement("UPDATE ers_reimbursements SET resolved = ?, resolver_id = ?, status_id = ? WHERE reimb_id = ?")) {
+            ps.setTimestamp(1, reimbursement.getResolved());
+            ps.setString(2, reimbursement.getResolver_id().toString());
+            ps.setString(3, reimbursement.getStatus_id().toString());
+            ps.setString(4, reimbursement.getReimb_id().toString());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to save to the database.");
@@ -122,6 +135,22 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         try (Connection con = ConnectionFactory.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE type_id = ? AND status_id = ?")) {
             ps.setString(1, type.toString());
+            ps.setString(2, status.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                reimbursements.add(getRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return reimbursements;
+    }
+
+    public List<Reimbursement> getByUser(User user, ReimbursementStatus status) {
+        List<Reimbursement> reimbursements = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE author_id AND status_id = ?")) {
+            ps.setString(1, user.getUserID().toString());
             ps.setString(2, status.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
