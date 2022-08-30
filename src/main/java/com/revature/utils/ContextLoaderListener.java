@@ -1,9 +1,9 @@
 package com.revature.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.servlets.AuthenticationServlet;
+import com.revature.servlets.LoginServlet;
 import com.revature.servlets.TestServlet;
-import com.revature.servlets.UserServlet;
+import com.revature.servlets.SignupServlet;
+import com.revature.servlets.admin.UsersServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -16,8 +16,9 @@ public class ContextLoaderListener implements ServletContextListener {
 
         //TODO Remove TestServlet when done with application
         servletContext.addServlet("TestServlet", new TestServlet()).addMapping("/test");
-        servletContext.addServlet("UserServlet", new UserServlet()).addMapping("/user/signup");
-        servletContext.addServlet("AuthenticationServlet", new AuthenticationServlet()).addMapping("/user/login");
+        servletContext.addServlet("SignupServlet", new SignupServlet()).addMapping("/signup");
+        servletContext.addServlet("LoginServlet", new LoginServlet()).addMapping("/login");
+        servletContext.addServlet("UsersServlet", new UsersServlet()).addMapping("/admin/users");
     }
 
     @Override
