@@ -8,6 +8,7 @@ import com.revature.utils.custom_exceptions.AuthenticationException;
 import com.revature.utils.custom_exceptions.InvalidRequestException;
 import com.revature.utils.custom_exceptions.ResourceConflictException;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,5 +68,13 @@ public class UserService {
 
     public static List<User> getAllUsers() {
         return userDAO.getAll();
+    }
+
+    public static List<User> getAllActiveUsers() {
+        return userDAO.getAllActiveUsers();
+    }
+
+    public static List<User> getAllInactiveUsers() {
+        return userDAO.getAllInactiveUsers();
     }
 }
