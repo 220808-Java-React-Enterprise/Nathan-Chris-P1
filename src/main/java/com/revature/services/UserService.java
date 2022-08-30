@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public static void checkAvailableUsername(String username) throws ResourceConflictException {
-        if (userDAO.getByKey(username) != null){
+        if (userDAO.isUsernameAvailable(username)){
             throw new ResourceConflictException("Username is already taken, please choose another.");
         }
     }
