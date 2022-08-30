@@ -20,7 +20,8 @@ public class SignupServlet extends HttpServlet {
             resp.setStatus(200);
             resp.setContentType("application/json");
         }catch (NetworkException e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             resp.setStatus(e.getStatusCode());
         }
     }

@@ -2,7 +2,6 @@ package com.revature.services;
 import com.revature.daos.UserDAO;
 import com.revature.dtos.requests.LoginRequest;
 import com.revature.dtos.requests.NewUserRequest;
-import com.revature.models.Principal;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.utils.custom_exceptions.AuthenticationException;
@@ -48,7 +47,7 @@ public class UserService {
     }
 
     public static User getUserByUsername(String username) {
-        return userDAO.getByKey(username);
+        return userDAO.getUserByUsername(username);
     }
 
     public static void checkAvailableUsername(String username) throws ResourceConflictException {
@@ -57,8 +56,8 @@ public class UserService {
         }
     }
 
-    public static Principal validateLogin(LoginRequest request) throws AuthenticationException {
-        Principal user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+    public static User validateLogin(LoginRequest request) throws AuthenticationException {
+        User user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
         if(user == null){
             //TODO tell why unsuccessful.
             throw new AuthenticationException("Login unsuccessful. Please check username and password.");
