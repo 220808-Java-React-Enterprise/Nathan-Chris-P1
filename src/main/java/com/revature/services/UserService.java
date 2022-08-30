@@ -100,4 +100,11 @@ public class UserService {
             updateUser(user);
         }
     }
+
+    public static void deleteUser(User user) {
+        deleteUser(user.getUserID());
+    }
+    public static void deleteUser(UUID id) {
+        userDAO.delete(id);
+    }
 }

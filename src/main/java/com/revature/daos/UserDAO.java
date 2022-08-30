@@ -54,7 +54,17 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public void delete(String id) {throw new InvalidSQLException("Not yet implemented.");}
+    public void delete(UUID id) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement("DELETE FROM ers_users WHERE user_id = ?")){
+            ps.setString(1, id.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to delete from the database.");
+        }
+    }
 
     @Override
     public User getByKey(String key) {
