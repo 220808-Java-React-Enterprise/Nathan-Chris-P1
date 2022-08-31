@@ -107,4 +107,9 @@ public class UserService {
     public static void deleteUser(UUID id) {
         userDAO.delete(id);
     }
+
+    public static void changePassword(User user, String password) {
+        user.setPassword(password);
+        userDAO.update(user);
+    }
 }
