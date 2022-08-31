@@ -46,7 +46,7 @@ CREATE TABLE ers_users (
 );
 
 CREATE TABLE ers_reimbursements (
-	reimb_id varchar,
+	reimb_id varchar NOT NULL,
 	amount numeric(6, 2) NOT NULL,
 	submitted timestamp NOT NULL,
 	resolved timestamp,
