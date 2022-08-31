@@ -6,9 +6,16 @@ import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.ReimbursementType;
 import com.revature.models.User;
+import com.revature.utils.custom_exceptions.BadRequestException;
+import com.revature.utils.custom_exceptions.ForbiddenException;
+import com.revature.utils.custom_exceptions.NetworkException;
+import com.revature.utils.custom_exceptions.NotFoundException;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ReimbursementService {
     private static ReimbursementDAO reimbDAO = new ReimbursementDAO();
@@ -20,8 +27,16 @@ public class ReimbursementService {
         //reimbDAO.save(new Reimbursement());
     }
     
+    public static Reimbursement getReimbursementById(String id) {
+        return reimbDAO.getByKey(id);
+    }
+    
     public static List<Reimbursement> getReimbursementsByManager(User manager) {
         return reimbDAO.getByManager(manager);
+    }
+
+    public static List<Reimbursement> getAllReimbursements() {
+        return reimbDAO.getAll();
     }
 
     public static List<Reimbursement> getReimbursementsByType(String type) {
@@ -52,6 +67,22 @@ public class ReimbursementService {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+    
+    public static void updateReimbursement(String id, User manager, String status) throws NetworkException {
+        try {
+            if (id == null || id.isEmpty()) throw new BadRequestException("No id given.");
+            Reimbursement reimb = ReimbursementService.getReimbursementById(id);
+            if (reimb == null) throw new NotFoundException("No reimbursement was found with that id.");
+            else if (reimb.getStatus_id() != ReimbursementStatus.PENDING)
+                throw new ForbiddenException("Finance managers are only allowed to change Pending requests.");
+            reimb.setResolved(Timestamp.from(Instant.now()));
+            reimb.setResolver(manager.getUserID());
+            reimb.setStatus(ReimbursementStatus.valueOf(status));
+            reimbDAO.update(reimb);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status");
         }
     }
 }

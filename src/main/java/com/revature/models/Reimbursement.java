@@ -88,4 +88,19 @@ public class Reimbursement {
     public ReimbursementType getType_id() {
         return type_id;
     }
+
+    public Reimbursement setResolved(Timestamp resolved) {
+        this.resolved = resolved;
+        return this;
+    }
+
+    public Reimbursement setResolver(UUID resolver_id) {
+        this.resolver_id = resolver_id;
+        return this;
+    }
+
+    public Reimbursement setStatus(ReimbursementStatus status_id) {
+        this.status_id = status_id;
+        return this;
+    }
 }
