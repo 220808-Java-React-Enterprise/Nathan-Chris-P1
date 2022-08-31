@@ -149,9 +149,24 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
     public List<Reimbursement> getByUser(User user, ReimbursementStatus status) {
         List<Reimbursement> reimbursements = new ArrayList<>();
         try (Connection con = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE author_id AND status_id = ?")) {
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE author_id = ? AND status_id = ?")) {
             ps.setString(1, user.getUserID().toString());
             ps.setString(2, status.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                reimbursements.add(getRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return reimbursements;
+    }
+
+    public List<Reimbursement> getByManager(User user) {
+        List<Reimbursement> reimbursements = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE resolver_id = ? AND status_id = ?")) {
+            ps.setString(1, user.getUserID().toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
