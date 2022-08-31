@@ -57,6 +57,7 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //TODO possibly change to json in body rather than parameters
         try {
             User loginUser = TokenService.extractRequesterDetails(req);
             if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive())
@@ -93,6 +94,7 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //TODO possibly change to json in body rather than parameters
         try {
             User loginUser = TokenService.extractRequesterDetails(req);
             if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive())
