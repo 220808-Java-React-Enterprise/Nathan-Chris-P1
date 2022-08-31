@@ -5,6 +5,7 @@ import com.revature.dtos.requests.NewUserRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.utils.custom_exceptions.AuthenticationException;
+import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.InvalidRequestException;
 import com.revature.utils.custom_exceptions.ResourceConflictException;
 
@@ -76,5 +77,34 @@ public class UserService {
 
     public static List<User> getAllInactiveUsers() {
         return userDAO.getAllInactiveUsers();
+    }
+
+    public static void updateUser(User user) {
+        userDAO.update(user);
+    }
+
+    public static void activateUser(User user) {
+        if(user.isActive()){
+            throw new BadRequestException("User is already active.");
+        } else {
+            user.Activate();
+            updateUser(user);
+        }
+    }
+
+    public static void deactivateUser(User user) {
+        if(!user.isActive()){
+            throw new BadRequestException("User is already inactive.");
+        } else {
+            user.Deactivate();
+            updateUser(user);
+        }
+    }
+
+    public static void deleteUser(User user) {
+        deleteUser(user.getUserID());
+    }
+    public static void deleteUser(UUID id) {
+        userDAO.delete(id);
     }
 }

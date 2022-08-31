@@ -53,7 +53,7 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
     public void update(Reimbursement obj) {throw new InvalidSQLException("Not yet implemented.");}
 
     @Override
-    public void delete(String id) {throw new InvalidSQLException("Not yet implemented.");}
+    public void delete(UUID id) {throw new InvalidSQLException("Not yet implemented.");}
 
     private Reimbursement getRow(ResultSet rs) throws SQLException {
         return new Reimbursement(

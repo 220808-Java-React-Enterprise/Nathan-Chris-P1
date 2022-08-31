@@ -3,7 +3,7 @@ package com.revature.models;
 import java.util.UUID;
 
 public class User {
-    private UUID user_id;
+    private final UUID user_id;
     private String username;
     private String email;
     private String password;
@@ -53,6 +53,14 @@ public class User {
 
     public UserRole getRole() {
         return role;
+    }
+
+    public void Activate() {
+        this.is_active = true;
+    }
+
+    public void Deactivate() {
+        this.is_active = false;
     }
 
     @Override

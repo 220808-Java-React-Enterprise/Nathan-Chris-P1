@@ -4,6 +4,7 @@ import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.services.TokenService;
 import com.revature.services.UserService;
+import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
 import javax.servlet.ServletException;
@@ -20,34 +21,99 @@ public class UsersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            User user = TokenService.extractRequesterDetails(req);
-            if((user.getRole() != UserRole.ADMIN) || !user.isActive()){
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive()){
                 throw new ForbiddenException("Unauthorized User. Active Admins only.");
             }
             resp.setStatus(200);
             resp.setContentType("application/json");
-            List<User> queryUsers = new ArrayList<>();
+            List<User> users = new ArrayList<>();
             if(req.getParameter("user") != null) {
-                User queryUser = UserService.getUserByUsername(req.getParameter("user"));
-                if (queryUser != null) {
+                User user = UserService.getUserByUsername(req.getParameter("user"));
+                if (user != null) {
                     if (req.getParameter("active") != null) {
-                        if (Boolean.parseBoolean(req.getParameter("active")) == queryUser.isActive()) {
-                            queryUsers.add(queryUser);
+                        if (Boolean.parseBoolean(req.getParameter("active")) == user.isActive()) {
+                            users.add(user);
                         }
                     } else {
-                        queryUsers.add(queryUser);
+                        users.add(user);
                     }
                 }
             } else if (req.getParameter("active") != null) {
                 if(Boolean.parseBoolean(req.getParameter("active"))) {
-                    queryUsers.addAll(UserService.getAllActiveUsers());
+                    users.addAll(UserService.getAllActiveUsers());
                 }else{
-                    queryUsers.addAll(UserService.getAllInactiveUsers());
+                    users.addAll(UserService.getAllInactiveUsers());
                 }
             } else {
-                queryUsers.addAll(UserService.getAllUsers());
+                users.addAll(UserService.getAllUsers());
             }
-            resp.getWriter().write(getMapper().writeValueAsString(queryUsers));
+            resp.getWriter().write(getMapper().writeValueAsString(users));
+        }catch (NetworkException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(e.getStatusCode());
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive()){
+                throw new ForbiddenException("Unauthorized User. Active Admins only.");
+            }
+            if((req.getParameter("action") == null)
+                    || (!(req.getParameter("action").equalsIgnoreCase("password"))
+                        && !(req.getParameter("action").equalsIgnoreCase("activate"))
+                        && !(req.getParameter("action").equalsIgnoreCase("deactivate")))
+            ){
+                throw new BadRequestException("Invalid or missing action for user modification.");
+            }
+            User user;
+            if(req.getParameter("user") == null || req.getParameter("user").equals("")){
+                throw new BadRequestException("User param is required for user modification.");
+            }else{
+                user = UserService.getUserByUsername(req.getParameter("user"));
+                if(user == null){
+                    throw new BadRequestException("No user with username " + req.getParameter("user") + " found. Cannot modify user.");
+                }
+            }
+            switch(req.getParameter("action").toLowerCase()){
+                case "password":
+                    //TODO password reset
+                    break;
+                case "activate":
+                    UserService.activateUser(user);
+                    break;
+                case"deactivate":
+                    UserService.deactivateUser(user);
+                    break;
+            }
+        }catch (NetworkException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(e.getStatusCode());
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive()){
+                throw new ForbiddenException("Unauthorized User. Active Admins only.");
+            }
+            User user;
+            if(req.getParameter("user") == null || req.getParameter("user").equals("")){
+                throw new BadRequestException("User param is required for user deletion.");
+            }else {
+                user = UserService.getUserByUsername(req.getParameter("user"));
+                if (user == null) {
+                    throw new BadRequestException("No user with username " + req.getParameter("user") + " found. Cannot delete user.");
+                }
+                UserService.deleteUser(user);
+            }
         }catch (NetworkException e){
             System.out.println(e.getMessage());
             e.printStackTrace();

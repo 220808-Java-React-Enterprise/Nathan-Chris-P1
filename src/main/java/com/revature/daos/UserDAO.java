@@ -3,13 +3,11 @@ package com.revature.daos;
 import com.revature.models.*;
 import com.revature.utils.custom_exceptions.InvalidSQLException;
 import com.revature.utils.database.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,16 +27,44 @@ public class UserDAO implements DAO<User> {
             ps.setString(8, user.getRole().name());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to save to the database.");
         }
     }
 
     @Override
-    public void update(User obj) {throw new InvalidSQLException("Not yet implemented.");}
+    public void update(User user) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement("UPDATE ers_users SET username = ?, email = ?, password = ?, given_name = ?, surname = ?, is_active = ?, role_id = ? WHERE user_id = ?")){
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getGivenName());
+            ps.setString(5, user.getSurname());
+            ps.setBoolean(6, user.isActive());
+            ps.setString(7, user.getRole().name());
+            ps.setString(8, user.getUserID().toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to update the database.");
+        }
+    }
 
     @Override
-    public void delete(String id) {throw new InvalidSQLException("Not yet implemented.");}
+    public void delete(UUID id) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement("DELETE FROM ers_users WHERE user_id = ?")){
+            ps.setString(1, id.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to delete from the database.");
+        }
+    }
 
     @Override
     public User getByKey(String key) {
@@ -50,6 +76,7 @@ public class UserDAO implements DAO<User> {
                 return getRow(rs);
             }
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
@@ -66,6 +93,8 @@ public class UserDAO implements DAO<User> {
                 users.add(getRow(rs));
             }
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return users;
@@ -79,6 +108,8 @@ public class UserDAO implements DAO<User> {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return getRow(rs);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return null;
@@ -91,6 +122,8 @@ public class UserDAO implements DAO<User> {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return true;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return false;
@@ -116,6 +149,8 @@ public class UserDAO implements DAO<User> {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return getRow(rs);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return null;
@@ -130,6 +165,8 @@ public class UserDAO implements DAO<User> {
                 users.add(getRow(rs));
             }
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return users;
@@ -144,6 +181,8 @@ public class UserDAO implements DAO<User> {
                 users.add(getRow(rs));
             }
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to read from the database.");
         }
         return users;
