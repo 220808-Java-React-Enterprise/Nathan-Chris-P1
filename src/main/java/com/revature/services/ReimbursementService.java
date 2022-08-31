@@ -65,4 +65,8 @@ public class ReimbursementService {
             return new ArrayList<>();
         }
     }
+
+    public static List<Reimbursement> getReimbursementsByAuthor(User user) {
+        return reimbDAO.getByUser(user);
+    }
 }

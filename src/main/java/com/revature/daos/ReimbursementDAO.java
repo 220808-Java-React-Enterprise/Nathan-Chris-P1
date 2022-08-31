@@ -64,9 +64,9 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
                 rs.getTimestamp("resolved"),
                 rs.getString("description"),
                 rs.getBytes("receipt"),
-                UUID.fromString(rs.getString("payment_id")),
+                rs.getString("payment_id") != null ? UUID.fromString(rs.getString("payment_id")) : null,
                 UUID.fromString(rs.getString("author_id")),
-                UUID.fromString(rs.getString("resolver_id")),
+                rs.getString("resolver_id") != null ? UUID.fromString(rs.getString("resolver_id")) : null,
                 ReimbursementStatus.valueOf(rs.getString("status_id")),
                 ReimbursementType.valueOf(rs.getString("type_id"))
         );
@@ -147,12 +147,11 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         return reimbursements;
     }
 
-    public List<Reimbursement> getByUser(User user, ReimbursementStatus status) {
+    public List<Reimbursement> getByUser(User user) {
         List<Reimbursement> reimbursements = new ArrayList<>();
         try (Connection con = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE author_id = ? AND status_id = ?")) {
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE author_id = ?")) {
             ps.setString(1, user.getUserID().toString());
-            ps.setString(2, status.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
@@ -177,4 +176,5 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         }
         return reimbursements;
     }
+
 }
