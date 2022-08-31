@@ -22,15 +22,31 @@ public class ReimbursementService {
     
     public ReimbursementService(ReimbursementDAO reimbDAO) { ReimbursementService.reimbDAO = reimbDAO; }
     
-    public static void addReimbursement(NewReimbursementRequest request) {
-        //TODO
-        //reimbDAO.save(new Reimbursement());
+
+    public static void addReimbursement(NewReimbursementRequest request, UUID userID) {
+        reimbDAO.save(new Reimbursement(
+                UUID.randomUUID(),
+                request.getAmount(),
+                Timestamp.from(Instant.now()),
+                null,
+                request.getDescription(),
+                null,
+                UUID.fromString(request.getPayment_id()),
+                userID,
+                null,
+                ReimbursementStatus.PENDING,
+                ReimbursementType.valueOf(request.getType())
+        ));
     }
-    
+
     public static Reimbursement getReimbursementById(String id) {
         return reimbDAO.getByKey(id);
     }
-    
+
+    public static List<Reimbursement> getReimbursementsByAuthor(User user) {
+        return reimbDAO.getByUser(user);
+    }
+
     public static List<Reimbursement> getReimbursementsByManager(User manager) {
         return reimbDAO.getByManager(manager);
     }
@@ -69,7 +85,6 @@ public class ReimbursementService {
             return new ArrayList<>();
         }
     }
-    
     public static void updateReimbursement(String id, User manager, String status) throws NetworkException {
         try {
             if (id == null || id.isEmpty()) throw new BadRequestException("No id given.");
@@ -80,7 +95,7 @@ public class ReimbursementService {
             reimb.setResolved(Timestamp.from(Instant.now()));
             reimb.setResolver(manager.getUserID());
             reimb.setStatus(ReimbursementStatus.valueOf(status));
-            reimbDAO.update(reimb);
+            reimbDAO.setStatus(reimb);
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
         }
