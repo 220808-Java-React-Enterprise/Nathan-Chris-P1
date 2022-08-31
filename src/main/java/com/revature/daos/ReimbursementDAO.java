@@ -51,7 +51,30 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
     }
 
     @Override
-    public void update(Reimbursement obj) {throw new InvalidSQLException("Not yet implemented.");}
+    public void update(Reimbursement reimbursement) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement("UPDATE ers_reimbursements SET amount = ?, submitted = ?, resolved = ?, description = ?, receipt = ?, payment_id = ?, author_id = ?, resolver_id = ?, status_id = ?, type_id = ? WHERE rerimb_id = ?")) {
+            ps.setBigDecimal(1, reimbursement.getAmount());
+            ps.setTimestamp(2, reimbursement.getSubmitted());
+            ps.setTimestamp(3, reimbursement.getResolved());
+            ps.setString(4, reimbursement.getDescription());
+            ps.setBytes(5, reimbursement.getReceipt());
+            ps.setString(6, reimbursement.getPayment_id().toString());
+            ps.setString(7, reimbursement.getAuthor_id().toString());
+            if(reimbursement.getResolver_id() == null){
+                ps.setNull(8, Types.VARCHAR);
+            }else{
+                ps.setString(8, reimbursement.getResolver_id().toString());
+            }
+            ps.setString(9, reimbursement.getStatus_id().name());
+            ps.setString(10, reimbursement.getType_id().name());
+            ps.setString(11, reimbursement.getReimb_id().toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
 
     @Override
     public void delete(UUID id) {throw new InvalidSQLException("Not yet implemented.");}

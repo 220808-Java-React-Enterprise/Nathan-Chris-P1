@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.daos.ReimbursementDAO;
 import com.revature.dtos.requests.NewReimbursementRequest;
+import com.revature.dtos.requests.UpdateReimbursementRequest;
 import com.revature.models.*;
 
 import java.sql.Timestamp;
@@ -20,6 +21,22 @@ public class ReimbursementService {
                 UUID.randomUUID(),
                 request.getAmount(),
                 Timestamp.from(ZonedDateTime.now().toInstant()),
+                null,
+                request.getDescription(),
+                null,
+                UUID.fromString(request.getPayment_id()),
+                userID,
+                null,
+                ReimbursementStatus.PENDING,
+                ReimbursementType.valueOf(request.getType())
+        ));
+    }
+
+    public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID){
+        reimbDAO.update(new Reimbursement(
+                UUID.fromString(request.getReimb_id()),
+                request.getAmount(),
+                reimbDAO.getByKey(request.getReimb_id()).getSubmitted(),
                 null,
                 request.getDescription(),
                 null,
