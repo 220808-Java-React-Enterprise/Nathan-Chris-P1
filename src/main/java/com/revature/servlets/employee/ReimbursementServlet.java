@@ -2,8 +2,12 @@ package com.revature.servlets.employee;
 
 import com.revature.dtos.requests.NewReimbursementRequest;
 import com.revature.models.Reimbursement;
+import com.revature.models.User;
+import com.revature.models.UserRole;
 import com.revature.services.ReimbursementService;
+import com.revature.services.TokenService;
 import com.revature.services.UserService;
+import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +20,11 @@ public class ReimbursementServlet  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            ReimbursementService.addReimbursement(getMapper().readValue(req.getInputStream(), NewReimbursementRequest.class));
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.EMPLOYEE) || !loginUser.isActive())
+                throw new ForbiddenException("Unauthorized User. Active Employees only.");
+            ReimbursementService.addReimbursement(getMapper().readValue(req.getInputStream(), NewReimbursementRequest.class),
+                    loginUser.getUserID());
             resp.setStatus(200);
             resp.setContentType("application/json");
         }catch (NetworkException e){

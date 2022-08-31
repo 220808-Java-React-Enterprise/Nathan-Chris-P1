@@ -15,7 +15,7 @@ public class ReimbursementService {
 
     public ReimbursementService(ReimbursementDAO reimbDAO) { ReimbursementService.reimbDAO = reimbDAO; }
 
-    public static void addReimbursement(NewReimbursementRequest request) {
+    public static void addReimbursement(NewReimbursementRequest request, UUID userID) {
         reimbDAO.save(new Reimbursement(
                 UUID.randomUUID(),
                 request.getAmount(),
@@ -24,7 +24,7 @@ public class ReimbursementService {
                 request.getDescription(),
                 null,
                 UUID.fromString(request.getPayment_id()),
-                UserService.getUserByUsername(request.getAuthor_username()).getUserID(),
+                userID,
                 null,
                 ReimbursementStatus.PENDING,
                 ReimbursementType.valueOf(request.getType())
