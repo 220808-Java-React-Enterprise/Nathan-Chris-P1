@@ -59,6 +59,7 @@ public class ReimbursementServlet extends HttpServlet {
             User loginUser = TokenService.extractRequesterDetails(req);
             if((loginUser.getRole() != UserRole.EMPLOYEE) || !loginUser.isActive())
                 throw new ForbiddenException("Unauthorized User. Active Employees only.");
+            //TODO check if author matches reimbursement
             ReimbursementService.updateReimbursement(getMapper().readValue(req.getInputStream(), UpdateReimbursementRequest.class),
                     loginUser.getUserID());
             resp.setStatus(200);
@@ -69,4 +70,6 @@ public class ReimbursementServlet extends HttpServlet {
             resp.setStatus(e.getStatusCode());
         }
     }
+
+    //TODO delete pending request
 }
