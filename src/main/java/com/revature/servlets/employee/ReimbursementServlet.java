@@ -1,5 +1,6 @@
 package com.revature.servlets.employee;
 import com.revature.dtos.requests.NewReimbursementRequest;
+import com.revature.dtos.requests.UpdateReimbursementRequest;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.User;
@@ -51,4 +52,24 @@ public class ReimbursementServlet extends HttpServlet {
             resp.setStatus(e.getStatusCode());
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try{
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.EMPLOYEE) || !loginUser.isActive())
+                throw new ForbiddenException("Unauthorized User. Active Employees only.");
+            //TODO check if author matches reimbursement
+            ReimbursementService.updateReimbursement(getMapper().readValue(req.getInputStream(), UpdateReimbursementRequest.class),
+                    loginUser.getUserID());
+            resp.setStatus(200);
+            resp.setContentType("application/json");
+        }catch (NetworkException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(e.getStatusCode());
+        }
+    }
+
+    //TODO delete pending request
 }
