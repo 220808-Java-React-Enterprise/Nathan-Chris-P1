@@ -42,8 +42,9 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
              PreparedStatement ps = connection.prepareStatement("UPDATE ers_reimbursements SET resolved = ?, resolver_id = ?, status_id = ? WHERE reimb_id = ?")) {
             ps.setTimestamp(1, reimbursement.getResolved());
             ps.setString(2, reimbursement.getResolver_id().toString());
-            ps.setString(3, reimbursement.getStatus_id().toString());
+            ps.setString(3, reimbursement.getStatus_id().name());
             ps.setString(4, reimbursement.getReimb_id().toString());
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new InvalidSQLException("An error occurred when tyring to save to the database.");
@@ -176,5 +177,4 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         }
         return reimbursements;
     }
-
 }

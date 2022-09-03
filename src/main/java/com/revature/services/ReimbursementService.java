@@ -2,24 +2,32 @@ package com.revature.services;
 
 import com.revature.daos.ReimbursementDAO;
 import com.revature.dtos.requests.NewReimbursementRequest;
-import com.revature.models.*;
+import com.revature.models.Reimbursement;
+import com.revature.models.ReimbursementStatus;
+import com.revature.models.ReimbursementType;
+import com.revature.models.User;
+import com.revature.utils.custom_exceptions.BadRequestException;
+import com.revature.utils.custom_exceptions.ForbiddenException;
+import com.revature.utils.custom_exceptions.NetworkException;
+import com.revature.utils.custom_exceptions.NotFoundException;
 
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class ReimbursementService {
     private static ReimbursementDAO reimbDAO = new ReimbursementDAO();
-
+    
     public ReimbursementService(ReimbursementDAO reimbDAO) { ReimbursementService.reimbDAO = reimbDAO; }
+    
 
     public static void addReimbursement(NewReimbursementRequest request, UUID userID) {
         reimbDAO.save(new Reimbursement(
                 UUID.randomUUID(),
                 request.getAmount(),
-                Timestamp.from(ZonedDateTime.now().toInstant()),
+                Timestamp.from(Instant.now()),
                 null,
                 request.getDescription(),
                 null,
@@ -31,8 +39,20 @@ public class ReimbursementService {
         ));
     }
 
+    public static Reimbursement getReimbursementById(String id) {
+        return reimbDAO.getByKey(id);
+    }
+
+    public static List<Reimbursement> getReimbursementsByAuthor(User user) {
+        return reimbDAO.getByUser(user);
+    }
+
     public static List<Reimbursement> getReimbursementsByManager(User manager) {
         return reimbDAO.getByManager(manager);
+    }
+
+    public static List<Reimbursement> getAllReimbursements() {
+        return reimbDAO.getAll();
     }
 
     public static List<Reimbursement> getReimbursementsByType(String type) {
@@ -65,8 +85,19 @@ public class ReimbursementService {
             return new ArrayList<>();
         }
     }
-
-    public static List<Reimbursement> getReimbursementsByAuthor(User user) {
-        return reimbDAO.getByUser(user);
+    public static void updateReimbursement(String id, User manager, String status) throws NetworkException {
+        try {
+            if (id == null || id.isEmpty()) throw new BadRequestException("No id given.");
+            Reimbursement reimb = ReimbursementService.getReimbursementById(id);
+            if (reimb == null) throw new NotFoundException("No reimbursement was found with that id.");
+            else if (reimb.getStatus_id() != ReimbursementStatus.PENDING)
+                throw new ForbiddenException("Finance managers are only allowed to change Pending requests.");
+            reimb.setResolved(Timestamp.from(Instant.now()));
+            reimb.setResolver(manager.getUserID());
+            reimb.setStatus(ReimbursementStatus.valueOf(status));
+            reimbDAO.setStatus(reimb);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status");
+        }
     }
 }

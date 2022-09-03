@@ -4,7 +4,7 @@ import com.revature.servlets.LoginServlet;
 import com.revature.servlets.TestServlet;
 import com.revature.servlets.SignupServlet;
 import com.revature.servlets.admin.UsersServlet;
-import com.revature.servlets.employee.ReimbursementServlet;
+import com.revature.servlets.finance.ReimbursementServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -20,7 +20,8 @@ public class ContextLoaderListener implements ServletContextListener {
         servletContext.addServlet("SignupServlet", new SignupServlet()).addMapping("/signup");
         servletContext.addServlet("LoginServlet", new LoginServlet()).addMapping("/login");
         servletContext.addServlet("UsersServlet", new UsersServlet()).addMapping("/admin/users");
-        servletContext.addServlet("ReimbursementServlet", new ReimbursementServlet()).addMapping("/employee/reimbursement");
+        servletContext.addServlet("ManagerReimbursementServlet", new ReimbursementServlet()).addMapping("/finance/reimbursements");
+        servletContext.addServlet("EmployeeReimbursementServlet", new com.revature.servlets.employee.ReimbursementServlet()).addMapping("/employee/reimbursement");
     }
 
     @Override
