@@ -9,6 +9,13 @@ import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.InvalidRequestException;
 import com.revature.utils.custom_exceptions.ResourceConflictException;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -28,17 +35,19 @@ public class UserService {
         if(!password.matches("^[A-Za-z\\d@$!%*?&]{5,30}$"))
             throw new InvalidRequestException("Password must be between 5 and 30 alphanumeric or special characters.");
     }
-
+    
     public static User registerUser(NewUserRequest request){
         validateUsername(request.getUsername());
         validatePassword(request.getPassword());
         checkAvailableUsername(request.getUsername());
+        String salt = UUID.randomUUID().toString().replace("-","");
+        String hash = hashPassword(request.getPassword().toCharArray(), DatatypeConverter.parseHexBinary(salt));
         userDAO.save(
                 new User(
                     UUID.randomUUID(),
                     request.getUsername(),
                     request.getEmail(),
-                    request.getPassword(),
+                    salt + ":" + hash,
                     request.getGiven_name(),
                     request.getSurname(),
                     false,
@@ -58,13 +67,26 @@ public class UserService {
         }
     }
 
-    public static User validateLogin(LoginRequest request) throws AuthenticationException {
-        User user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
-        if(user == null){
-            //TODO tell why unsuccessful.
-            throw new AuthenticationException("Login unsuccessful. Please check username and password.");
+    public static String hashPassword(char[] password, byte[] salt) {
+        try {
+            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            KeySpec ks = new PBEKeySpec(password, salt, 1024, 128);
+            return DatatypeConverter.printHexBinary(f.generateSecret(ks).getEncoded());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
-        return user;
+    }
+
+    public static User validateLogin(LoginRequest request) throws AuthenticationException {
+        User user = userDAO.getUserByUsername(request.getUsername());
+        if (user != null) {
+            String[] password = user.getPassword().split(":");
+            if (password.length == 2 && password[1].equals(hashPassword(request.getPassword().toCharArray(), DatatypeConverter.parseHexBinary(password[0]))))
+                return user;
+        }
+        throw new AuthenticationException("Login unsuccessful. Please check username and password.");
     }
 
     public static List<User> getAllUsers() {
@@ -109,6 +131,8 @@ public class UserService {
     }
 
     public static void changePassword(User user, String password) {
+        String salt = UUID.randomUUID().toString().replace("-","");
+        String hash = hashPassword(password.toCharArray(), DatatypeConverter.parseHexBinary(salt));
         user.setPassword(password);
         userDAO.update(user);
     }
