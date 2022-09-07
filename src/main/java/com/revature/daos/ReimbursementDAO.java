@@ -54,7 +54,7 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
     @Override
     public void update(Reimbursement reimbursement) {
         try (Connection connection = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = connection.prepareStatement("UPDATE ers_reimbursements SET amount = ?, submitted = ?, resolved = ?, description = ?, receipt = ?, payment_id = ?, author_id = ?, resolver_id = ?, status_id = ?, type_id = ? WHERE rerimb_id = ?")) {
+             PreparedStatement ps = connection.prepareStatement("UPDATE ers_reimbursements SET amount = ?, submitted = ?, resolved = ?, description = ?, receipt = ?, payment_id = ?, author_id = ?, resolver_id = ?, status_id = ?, type_id = ? WHERE reimb_id = ?")) {
             ps.setBigDecimal(1, reimbursement.getAmount());
             ps.setTimestamp(2, reimbursement.getSubmitted());
             ps.setTimestamp(3, reimbursement.getResolved());

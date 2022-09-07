@@ -133,7 +133,7 @@ public class UserService {
     public static void changePassword(User user, String password) {
         String salt = UUID.randomUUID().toString().replace("-","");
         String hash = hashPassword(password.toCharArray(), DatatypeConverter.parseHexBinary(salt));
-        user.setPassword(password);
+        user.setPassword(salt + ":" + hash);
         userDAO.update(user);
     }
 }

@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.models.User;
 import com.revature.utils.JwtConfig;
 import com.revature.utils.custom_exceptions.AuthenticationException;
+import com.revature.utils.custom_exceptions.ForbiddenException;
 import io.jsonwebtoken.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class TokenService {
             return UserService.getUserByUsername(claims.getSubject());
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
                  IllegalArgumentException e) {
-            throw new RuntimeException(e);
+            throw new AuthenticationException(e.getMessage());
         }
     }
 }

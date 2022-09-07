@@ -19,7 +19,7 @@ public class ConnectionFactory {
     private final Properties properties = new Properties();
 
     private ConnectionFactory() {
-        System.out.println(new File("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties").getAbsolutePath());
+        //System.out.println(new File("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties").getAbsolutePath());
         try {
             FileReader reader = new FileReader("webapps/nathan-chris-p1/WEB-INF/classes/database/db.properties");
             properties.load(reader);
