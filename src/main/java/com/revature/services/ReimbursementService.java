@@ -11,7 +11,6 @@ import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
 import com.revature.utils.custom_exceptions.NotFoundException;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -115,5 +114,9 @@ public class ReimbursementService {
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
         }
+    }
+
+    public static boolean isReimbursementAuthor(String reimb_id, UUID userID){
+        return getReimbursementById(reimb_id).getAuthor_id().equals(userID);
     }
 }

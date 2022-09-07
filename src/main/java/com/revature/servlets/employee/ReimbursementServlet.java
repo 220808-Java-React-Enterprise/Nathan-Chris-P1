@@ -59,9 +59,10 @@ public class ReimbursementServlet extends HttpServlet {
             User loginUser = TokenService.extractRequesterDetails(req);
             if((loginUser.getRole() != UserRole.EMPLOYEE) || !loginUser.isActive())
                 throw new ForbiddenException("Unauthorized User. Active Employees only.");
-            //TODO check if author matches reimbursement
-            ReimbursementService.updateReimbursement(getMapper().readValue(req.getInputStream(), UpdateReimbursementRequest.class),
-                    loginUser.getUserID());
+            UpdateReimbursementRequest request = getMapper().readValue(req.getInputStream(), UpdateReimbursementRequest.class);
+            if(!ReimbursementService.isReimbursementAuthor(request.getReimb_id(), loginUser.getUserID()))
+                throw new ForbiddenException("Unauthorized update. Employees can only update their own reimbursements.");
+            ReimbursementService.updateReimbursement(request, loginUser.getUserID());
             resp.setStatus(200);
             resp.setContentType("application/json");
         }catch (NetworkException e){
