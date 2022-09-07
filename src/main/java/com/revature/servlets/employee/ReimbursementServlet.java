@@ -1,5 +1,6 @@
 package com.revature.servlets.employee;
 
+import com.revature.dtos.requests.DeleteReimbursementRequest;
 import com.revature.dtos.requests.NewReimbursementRequest;
 import com.revature.dtos.requests.UpdateReimbursementRequest;
 import com.revature.models.User;
@@ -70,5 +71,22 @@ public class ReimbursementServlet extends HttpServlet {
         }
     }
 
-    //TODO delete pending request
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try{
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if(loginUser.getRole() != UserRole.EMPLOYEE)
+                throw new ForbiddenException("Unauthorized User. Active Employees only.");
+            DeleteReimbursementRequest request = getMapper().readValue(req.getInputStream(), DeleteReimbursementRequest.class);
+            if(!ReimbursementService.isReimbursementAuthor(request.getReimb_id(), loginUser.getUserID()))
+                throw new ForbiddenException("Unauthorized update. Employees can only update their own reimbursements.");
+            ReimbursementService.deleteReimbursement(request);
+            resp.setStatus(200);
+            resp.setContentType("application/json");
+        }catch (NetworkException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(e.getStatusCode());
+        }
+    }
 }

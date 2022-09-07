@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.daos.ReimbursementDAO;
+import com.revature.dtos.requests.DeleteReimbursementRequest;
 import com.revature.dtos.requests.NewReimbursementRequest;
 import com.revature.dtos.requests.UpdateReimbursementRequest;
 import com.revature.models.Reimbursement;
@@ -128,5 +129,9 @@ public class ReimbursementService {
 
     public static boolean isReimbursementAuthor(String reimb_id, UUID userID){
         return getReimbursementById(reimb_id).getAuthor_id().equals(userID);
+    }
+
+    public static void deleteReimbursement(DeleteReimbursementRequest request) {
+        reimbDAO.delete(UUID.fromString(request.getReimb_id()));
     }
 }

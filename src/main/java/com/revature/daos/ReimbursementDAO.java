@@ -81,7 +81,16 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
     }
 
     @Override
-    public void delete(UUID id) {throw new InvalidSQLException("Not yet implemented.");}
+    public void delete(UUID id) {
+        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement("DELETE FROM ers_reimbursements WHERE reimb_id = ?")) {
+            ps.setString(1, id.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to save to the database.");
+        }
+    }
 
     private Reimbursement getRow(ResultSet rs) throws SQLException {
         return new Reimbursement(
