@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static com.revature.utils.ObjectMapperManager.getMapper;
 
-public class UsersServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
