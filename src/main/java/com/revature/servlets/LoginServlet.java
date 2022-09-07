@@ -1,4 +1,5 @@
 package com.revature.servlets;
+
 import com.revature.dtos.requests.LoginRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
@@ -6,6 +7,7 @@ import com.revature.services.TokenService;
 import com.revature.services.UserService;
 import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

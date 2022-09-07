@@ -1,7 +1,5 @@
 package com.revature.dtos.requests;
 
-import java.util.UUID;
-
 public class NewUserRequest {
     private String username;
     private String email;

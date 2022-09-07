@@ -1,4 +1,5 @@
 package com.revature.services;
+
 import com.revature.daos.UserDAO;
 import com.revature.dtos.requests.LoginRequest;
 import com.revature.dtos.requests.NewUserRequest;
@@ -12,18 +13,16 @@ import com.revature.utils.custom_exceptions.ResourceConflictException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 public class UserService {
     private static UserDAO userDAO = new UserDAO();
     UserService(UserDAO userDAO){
-        this.userDAO = userDAO;
+        UserService.userDAO = userDAO;
     }
 
     public static void validateUsername(String username) throws InvalidRequestException {

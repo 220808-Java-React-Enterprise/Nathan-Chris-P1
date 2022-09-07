@@ -66,6 +66,16 @@ public class ReimbursementService {
         return reimbDAO.getByManager(manager);
     }
 
+    public static List<Reimbursement> getReimbursementsByManagerAndType(User manager, String type) {
+        try {
+            ReimbursementType rType = ReimbursementType.valueOf(type);
+            return reimbDAO.getByManagerAndType(manager, rType);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public static List<Reimbursement> getAllReimbursements() {
         return reimbDAO.getAll();
     }
