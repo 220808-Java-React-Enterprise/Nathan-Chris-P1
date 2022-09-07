@@ -35,7 +35,7 @@ public class ReimbursementService {
                 userID,
                 null,
                 ReimbursementStatus.PENDING,
-                ReimbursementType.valueOf(request.getType())
+                ReimbursementType.valueOf(request.getType().toUpperCase())
         ));
     }
 
