@@ -16,13 +16,13 @@ import java.io.IOException;
 public class UpdateServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User loginUser = TokenService.extractRequesterDetails(req);
-        if((loginUser.getRole() != UserRole.FINANCE_MANAGER) || !loginUser.isActive()){
-            throw new ForbiddenException("Unauthorized User. Active Finance Managers only.");
-        }
-        resp.setStatus(200);
-        resp.setContentType("application/json");
         try {
+            User loginUser = TokenService.extractRequesterDetails(req);
+            if((loginUser.getRole() != UserRole.FINANCE_MANAGER) || !loginUser.isActive()){
+                throw new ForbiddenException("Unauthorized User. Active Finance Managers only.");
+            }
+            resp.setStatus(200);
+            resp.setContentType("application/json");
             String id = req.getParameter("id");
             String status = req.getParameter("status");
             ReimbursementService.updateReimbursement(id, loginUser, status);

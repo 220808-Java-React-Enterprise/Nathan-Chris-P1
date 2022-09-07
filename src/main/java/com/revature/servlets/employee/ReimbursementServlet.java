@@ -59,8 +59,7 @@ public class ReimbursementServlet extends HttpServlet {
             if((loginUser.getRole() != UserRole.EMPLOYEE) || !loginUser.isActive())
                 throw new ForbiddenException("Unauthorized User. Active Employees only.");
             UpdateReimbursementRequest request = getMapper().readValue(req.getInputStream(), UpdateReimbursementRequest.class);
-            if(!ReimbursementService.isReimbursementAuthor(request.getReimb_id(), loginUser.getUserID()))
-                throw new ForbiddenException("Unauthorized update. Employees can only update their own reimbursements.");
+            ReimbursementService.verifyCanModify(request.getReimb_id(), loginUser.getUserID());
             ReimbursementService.updateReimbursement(request, loginUser.getUserID());
             resp.setStatus(200);
             resp.setContentType("application/json");
@@ -78,8 +77,7 @@ public class ReimbursementServlet extends HttpServlet {
             if(loginUser.getRole() != UserRole.EMPLOYEE)
                 throw new ForbiddenException("Unauthorized User. Active Employees only.");
             DeleteReimbursementRequest request = getMapper().readValue(req.getInputStream(), DeleteReimbursementRequest.class);
-            if(!ReimbursementService.isReimbursementAuthor(request.getReimb_id(), loginUser.getUserID()))
-                throw new ForbiddenException("Unauthorized update. Employees can only update their own reimbursements.");
+            ReimbursementService.verifyCanModify(request.getReimb_id(), loginUser.getUserID());
             ReimbursementService.deleteReimbursement(request);
             resp.setStatus(200);
             resp.setContentType("application/json");

@@ -127,8 +127,14 @@ public class ReimbursementService {
         }
     }
 
-    public static boolean isReimbursementAuthor(String reimb_id, UUID userID){
-        return getReimbursementById(reimb_id).getAuthor_id().equals(userID);
+    public static void verifyCanModify(String reimb_id, UUID userID){
+        Reimbursement reimbursement = getReimbursementById(reimb_id);
+        if(reimbursement == null)
+            throw new BadRequestException("Can not delete reimbursement that does not exit.");
+        if(!reimbursement.getAuthor_id().equals(userID))
+            throw new ForbiddenException("Unauthorized Reimbursement Modification. Employees can only modify their own reimbursements.");
+        if(!reimbursement.getStatus_id().equals(ReimbursementStatus.PENDING))
+            throw new ForbiddenException("Unauthorized Reimbursement Modification. Can only modify pending reimbursements.");
     }
 
     public static void deleteReimbursement(DeleteReimbursementRequest request) {

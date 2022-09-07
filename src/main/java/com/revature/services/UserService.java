@@ -135,4 +135,6 @@ public class UserService {
         user.setPassword(salt + ":" + hash);
         userDAO.update(user);
     }
+
+    //TODO make verifyUserRole and replace the user role checks on everything
 }
