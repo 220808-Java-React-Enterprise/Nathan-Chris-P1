@@ -1,10 +1,11 @@
-package com.revature.dtos.requests;
+package com.revature.dtos.requests.admin;
 
-public class LoginRequest {
-    private String username;
-    private String password;
+public class UpdateUserPasswordRequest{
+    String username;
+    String password;
 
-    public LoginRequest(){}
+    public UpdateUserPasswordRequest() {
+    }
 
     public String getUsername() {
         return username;
@@ -16,7 +17,7 @@ public class LoginRequest {
 
     @Override
     public String toString() {
-        return "LoginRequest{" +
+        return "UpdateUserPasswordRequest{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
