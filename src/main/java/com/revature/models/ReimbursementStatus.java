@@ -1,7 +1,7 @@
 package com.revature.models;
 
 public enum ReimbursementStatus {
-    NONE,
+    NULL,
     PENDING {
         @Override
         public String toString() {
@@ -20,5 +20,5 @@ public enum ReimbursementStatus {
             return "Approved";
         }
     },
-    STATUS
+    COUNT
 }

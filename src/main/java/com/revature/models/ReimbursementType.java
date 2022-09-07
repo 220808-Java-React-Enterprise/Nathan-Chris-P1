@@ -1,7 +1,7 @@
 package com.revature.models;
 
 public enum ReimbursementType {
-    NONE,
+    NULL,
     LODGING {
         @Override
         public String toString() {
