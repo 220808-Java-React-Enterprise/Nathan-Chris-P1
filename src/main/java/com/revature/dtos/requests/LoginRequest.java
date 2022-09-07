@@ -6,12 +6,6 @@ public class LoginRequest {
 
     public LoginRequest(){}
 
-    //TODO Possibly remove this
-    public LoginRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public String getUsername() {
         return username;
     }

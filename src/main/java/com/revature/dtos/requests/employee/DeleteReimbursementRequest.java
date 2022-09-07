@@ -1,14 +1,9 @@
-package com.revature.dtos.requests;
+package com.revature.dtos.requests.employee;
 
 public class DeleteReimbursementRequest {
     private String reimb_id;
 
     public DeleteReimbursementRequest() {
-    }
-
-    //TODO Possibly remove this
-    public DeleteReimbursementRequest(String reimb_id) {
-        this.reimb_id = reimb_id;
     }
 
     public String getReimb_id() {

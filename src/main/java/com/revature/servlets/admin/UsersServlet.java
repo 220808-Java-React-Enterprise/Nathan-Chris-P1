@@ -23,10 +23,7 @@ public class UsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             User loginUser = TokenService.extractRequesterDetails(req);
-            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive())
-                throw new ForbiddenException("Unauthorized User. Active Admins only.");
-            resp.setStatus(200);
-            resp.setContentType("application/json");
+            UserService.verifyUserRole(loginUser, UserRole.ADMIN);
             List<User> users = new ArrayList<>();
             if(req.getParameter("user") != null) {
                 User user = UserService.getUserByUsername(req.getParameter("user"));
@@ -48,6 +45,8 @@ public class UsersServlet extends HttpServlet {
             } else {
                 users.addAll(UserService.getAllUsers());
             }
+            resp.setStatus(200);
+            resp.setContentType("application/json");
             resp.getWriter().write(getMapper().writeValueAsString(users));
         }catch (NetworkException e){
             System.out.println(e.getMessage());

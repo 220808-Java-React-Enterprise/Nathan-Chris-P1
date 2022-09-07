@@ -5,10 +5,7 @@ import com.revature.dtos.requests.LoginRequest;
 import com.revature.dtos.requests.NewUserRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
-import com.revature.utils.custom_exceptions.AuthenticationException;
-import com.revature.utils.custom_exceptions.BadRequestException;
-import com.revature.utils.custom_exceptions.InvalidRequestException;
-import com.revature.utils.custom_exceptions.ResourceConflictException;
+import com.revature.utils.custom_exceptions.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -136,5 +133,8 @@ public class UserService {
         userDAO.update(user);
     }
 
-    //TODO make verifyUserRole and replace the user role checks on everything
+    public static void verifyUserRole(User user, UserRole role){
+        if((user.getRole() != role))
+            throw new ForbiddenException("Unauthorized User. Active " + role.toString() + " only.");
+    }
 }
