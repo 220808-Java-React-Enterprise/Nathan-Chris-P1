@@ -22,11 +22,11 @@ public class ContextLoaderListener implements ServletContextListener {
         servletContext.addServlet("TestServlet", new TestServlet()).addMapping("/test");
         servletContext.addServlet("SignupServlet", new SignupServlet()).addMapping("/signup");
         servletContext.addServlet("LoginServlet", new LoginServlet()).addMapping("/login");
-        servletContext.addServlet("UsersServlet", new UsersServlet()).addMapping("/admin/users");
+        servletContext.addServlet("UsersServlet", new UsersServlet()).addMapping("/admin");
         servletContext.addServlet("ManagerPendingServlet", new PendingServlet()).addMapping("/finance/viewpending");
         servletContext.addServlet("ManagerResolvedServlet", new ResolvedServlet()).addMapping("/finance/viewresolved");
         servletContext.addServlet("ManagerUpdateServlet", new UpdateServlet()).addMapping("/finance/update");
-        servletContext.addServlet("EmployeeReimbursementServlet", new ReimbursementServlet()).addMapping("/employee/reimbursement");
+        servletContext.addServlet("EmployeeReimbursementServlet", new ReimbursementServlet()).addMapping("/employee");
     }
 
     @Override

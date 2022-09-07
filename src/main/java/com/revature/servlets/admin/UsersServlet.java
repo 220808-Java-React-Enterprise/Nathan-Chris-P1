@@ -1,13 +1,15 @@
 package com.revature.servlets.admin;
 
+import com.revature.dtos.requests.admin.ActivateUserRequest;
+import com.revature.dtos.requests.admin.DeactivateUserRequest;
+import com.revature.dtos.requests.admin.DeleteUserRequest;
+import com.revature.dtos.requests.admin.UpdateUserPasswordRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.services.TokenService;
 import com.revature.services.UserService;
 import com.revature.utils.custom_exceptions.BadRequestException;
-import com.revature.utils.custom_exceptions.ForbiddenException;
 import com.revature.utils.custom_exceptions.NetworkException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.revature.utils.ObjectMapperManager.getMapper;
 
 public class UsersServlet extends HttpServlet {
@@ -57,35 +58,32 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO possibly change to json in body rather than parameters
         try {
             User loginUser = TokenService.extractRequesterDetails(req);
-            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive())
-                throw new ForbiddenException("Unauthorized User. Active Admins only.");
-            if((req.getParameter("action") == null)
-                    || (!(req.getParameter("action").equalsIgnoreCase("password"))
-                        && !(req.getParameter("action").equalsIgnoreCase("activate"))
-                        && !(req.getParameter("action").equalsIgnoreCase("deactivate"))))
-                throw new BadRequestException("Invalid or missing action for user modification.");
-            if(req.getParameter("user") == null || req.getParameter("user").equals(""))
-                throw new BadRequestException("User param is required for user modification.");
-            User user = UserService.getUserByUsername(req.getParameter("user"));
-            if(user == null)
-                throw new BadRequestException("No user with username " + req.getParameter("user") + " found. Cannot modify user.");
-            switch(req.getParameter("action").toLowerCase()){
-                case "password":
-                    if(req.getParameter("password") == null || req.getParameter("password").equals(""))
-                        throw new BadRequestException("Password param is required for password reset.");
-                    UserService.changePassword(user, req.getParameter("password"));
+            UserService.verifyUserRole(loginUser, UserRole.ADMIN);
+            if (req.getParameter("action") == null)
+                throw new BadRequestException("Missing action for user modification.");
+            switch (req.getParameter("action").toLowerCase()) {
+                case "password": {
+                    UpdateUserPasswordRequest request = getMapper().readValue(req.getInputStream(), UpdateUserPasswordRequest.class);
+                    UserService.changePassword(request.getUsername(), request.getPassword());
                     break;
-                case "activate":
-                    UserService.activateUser(user);
+                }
+                case "activate": {
+                    ActivateUserRequest request = getMapper().readValue(req.getInputStream(), ActivateUserRequest.class);
+                    UserService.activateUser(request.getUsername());
                     break;
-                case"deactivate":
-                    UserService.deactivateUser(user);
+                }
+                case "deactivate": {
+                    DeactivateUserRequest request = getMapper().readValue(req.getInputStream(), DeactivateUserRequest.class);
+                    UserService.deactivateUser(request.getUsername());
                     break;
+                }
+                default: throw new BadRequestException("Invalid action for user modification.");
             }
-        }catch (NetworkException e){
+            resp.setStatus(200);
+            resp.setContentType("application/json");
+        } catch (NetworkException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
             resp.setStatus(e.getStatusCode());
@@ -94,18 +92,14 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO possibly change to json in body rather than parameters
         try {
             User loginUser = TokenService.extractRequesterDetails(req);
-            if((loginUser.getRole() != UserRole.ADMIN) || !loginUser.isActive())
-                throw new ForbiddenException("Unauthorized User. Active Admins only.");
-            if(req.getParameter("user") == null || req.getParameter("user").equals(""))
-                throw new BadRequestException("User param is required for user deletion.");
-            User user = UserService.getUserByUsername(req.getParameter("user"));
-            if (user == null)
-                throw new BadRequestException("No user with username " + req.getParameter("user") + " found. Cannot delete user.");
-            UserService.deleteUser(user);
-        }catch (NetworkException e){
+            UserService.verifyUserRole(loginUser, UserRole.ADMIN);
+            DeleteUserRequest request = getMapper().readValue(req.getInputStream(), DeleteUserRequest.class);
+            UserService.deleteUser(request);
+            resp.setStatus(200);
+            resp.setContentType("application/json");
+        } catch (NetworkException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
             resp.setStatus(e.getStatusCode());

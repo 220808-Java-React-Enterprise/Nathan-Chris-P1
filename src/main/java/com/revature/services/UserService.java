@@ -3,12 +3,14 @@ package com.revature.services;
 import com.revature.daos.UserDAO;
 import com.revature.dtos.requests.LoginRequest;
 import com.revature.dtos.requests.NewUserRequest;
+import com.revature.dtos.requests.admin.DeleteUserRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.utils.custom_exceptions.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -101,24 +103,28 @@ public class UserService {
         userDAO.update(user);
     }
 
-    public static void activateUser(User user) {
+    public static void activateUser(String username) {
+        User user = getUserByUsername(username);
         if(user.isActive()){
             throw new BadRequestException("User is already active.");
         } else {
-            user.Activate();
+            user.activate();
             updateUser(user);
         }
     }
 
-    public static void deactivateUser(User user) {
+    public static void deactivateUser(String username) {
+        User user = getUserByUsername(username);
         if(!user.isActive()){
             throw new BadRequestException("User is already inactive.");
         } else {
-            user.Deactivate();
+            user.deactivate();
             updateUser(user);
         }
     }
-
+    public static void deleteUser(DeleteUserRequest request){
+        deleteUser(getUserByUsername(request.getUsername()));
+    }
     public static void deleteUser(User user) {
         deleteUser(user.getUserID());
     }
@@ -126,9 +132,10 @@ public class UserService {
         userDAO.delete(id);
     }
 
-    public static void changePassword(User user, String password) {
+    public static void changePassword(String username, String password) {
         String salt = UUID.randomUUID().toString().replace("-","");
         String hash = hashPassword(password.toCharArray(), DatatypeConverter.parseHexBinary(salt));
+        User user = getUserByUsername(username);
         user.setPassword(salt + ":" + hash);
         userDAO.update(user);
     }

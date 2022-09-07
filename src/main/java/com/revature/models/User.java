@@ -59,11 +59,11 @@ public class User {
         this.password = password;
     }
 
-    public void Activate() {
+    public void activate() {
         this.is_active = true;
     }
 
-    public void Deactivate() {
+    public void deactivate() {
         this.is_active = false;
     }
 
