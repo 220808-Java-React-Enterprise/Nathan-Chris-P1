@@ -129,7 +129,7 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         List<Reimbursement> reimbursements = new ArrayList<>();
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE type_id = ?")) {
-            ps.setString(1, type.toString());
+            ps.setString(1, type.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
@@ -144,7 +144,7 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         List<Reimbursement> reimbursements = new ArrayList<>();
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE status_id = ?")) {
-            ps.setString(1, status.toString());
+            ps.setString(1, status.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
@@ -159,8 +159,8 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         List<Reimbursement> reimbursements = new ArrayList<>();
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE type_id = ? AND status_id = ?")) {
-            ps.setString(1, type.toString());
-            ps.setString(2, status.toString());
+            ps.setString(1, type.name());
+            ps.setString(2, status.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
@@ -191,6 +191,22 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE resolver_id = ? AND status_id = ?")) {
             ps.setString(1, user.getUserID().toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                reimbursements.add(getRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return reimbursements;
+    }
+    public List<Reimbursement> getByManagerAndType(User user, ReimbursementType type) {
+        List<Reimbursement> reimbursements = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE resolver_id = ?" + 
+                                                                 (type != null ? " AND type_id = ?" : ""))) {
+            ps.setString(1, user.getUserID().toString());
+            if (type != null) ps.setString(2, type.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
