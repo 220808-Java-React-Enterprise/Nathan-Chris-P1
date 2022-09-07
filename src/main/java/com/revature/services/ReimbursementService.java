@@ -63,38 +63,10 @@ public class ReimbursementService {
         return reimbDAO.getByUser(user);
     }
 
-    public static List<Reimbursement> getReimbursementsByManager(User manager) {
-        return reimbDAO.getByManager(manager);
-    }
-
     public static List<Reimbursement> getReimbursementsByManagerAndType(User manager, String type) {
         try {
-            ReimbursementType rType = ReimbursementType.valueOf(type);
+            ReimbursementType rType = (type == null ? ReimbursementType.NULL : ReimbursementType.valueOf(type));
             return reimbDAO.getByManagerAndType(manager, rType);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public static List<Reimbursement> getAllReimbursements() {
-        return reimbDAO.getAll();
-    }
-
-    public static List<Reimbursement> getReimbursementsByType(String type) {
-        try {
-            ReimbursementType rType = ReimbursementType.valueOf(type);
-            return reimbDAO.getByType(rType);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public static List<Reimbursement> getReimbursementsByStatus(String status) {
-        try {
-            ReimbursementStatus rStatus = ReimbursementStatus.valueOf(status);
-            return reimbDAO.getByStatus(rStatus);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -103,14 +75,15 @@ public class ReimbursementService {
 
     public static List<Reimbursement> getReimbursementsByTypeAndStatus(String type, String status) {
         try {
-            ReimbursementType rType = ReimbursementType.valueOf(type);
-            ReimbursementStatus rStatus = ReimbursementStatus.valueOf(status);
+            ReimbursementType rType = (type == null ? ReimbursementType.NULL : ReimbursementType.valueOf(type));
+            ReimbursementStatus rStatus = (status == null ? ReimbursementStatus.NULL : ReimbursementStatus.valueOf(status));
             return reimbDAO.getByTypeAndStatus(rType, rStatus);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
+
     public static void updateReimbursement(String id, User manager, String status) throws NetworkException {
         try {
             if (id == null || id.isEmpty()) throw new BadRequestException("No id given.");

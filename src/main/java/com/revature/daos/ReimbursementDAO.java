@@ -169,10 +169,21 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
 
     public List<Reimbursement> getByTypeAndStatus(ReimbursementType type, ReimbursementStatus status) {
         List<Reimbursement> reimbursements = new ArrayList<>();
+        String query = "SELECT * FROM ers_reimbursements";
+        boolean hasWhere = false;
+        if (type != ReimbursementType.NULL) {
+            query += (" WHERE type_id = ?");
+            hasWhere = true;
+        }
+        if (status != ReimbursementStatus.NULL) {
+            query += (hasWhere ? " AND " : " WHERE ") + "status_id = ?";
+        }
+        System.out.println(query);
         try (Connection con = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE type_id = ? AND status_id = ?")) {
-            ps.setString(1, type.name());
-            ps.setString(2, status.name());
+             PreparedStatement ps = con.prepareStatement(query)) {
+            int index = 1;
+            if (type != ReimbursementType.NULL) ps.setString(index++, type.name());
+            if (status != ReimbursementStatus.NULL) ps.setString(index++, status.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
@@ -198,33 +209,21 @@ public class ReimbursementDAO implements DAO<Reimbursement> {
         return reimbursements;
     }
 
-    public List<Reimbursement> getByManager(User user) {
-        List<Reimbursement> reimbursements = new ArrayList<>();
-        try (Connection con = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE resolver_id = ? AND status_id = ?")) {
-            ps.setString(1, user.getUserID().toString());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                reimbursements.add(getRow(rs));
-            }
-        } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
-        }
-        return reimbursements;
-    }
     public List<Reimbursement> getByManagerAndType(User user, ReimbursementType type) {
         List<Reimbursement> reimbursements = new ArrayList<>();
+        String query;
+        if (type != ReimbursementType.NULL) query = "SELECT * FROM ers_reimbursements WHERE resolver_id = ?  AND type_id = ?";
+        else query = "SELECT * FROM ers_reimbursements WHERE resolver_id = ?";
         try (Connection con = ConnectionFactory.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_reimbursements WHERE resolver_id = ?" + 
-                                                                 (type != null ? " AND type_id = ?" : ""))) {
+             PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user.getUserID().toString());
-            if (type != null) ps.setString(2, type.name());
+            if (type != ReimbursementType.NULL) ps.setString(2, type.name());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 reimbursements.add(getRow(rs));
             }
         } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.", e);
         }
         return reimbursements;
     }
