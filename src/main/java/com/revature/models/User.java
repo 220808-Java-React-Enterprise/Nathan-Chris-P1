@@ -4,13 +4,13 @@ import java.util.UUID;
 
 public class User {
     private final UUID user_id;
-    private String username;
-    private String email;
+    private final String username;
+    private final String email;
     private String password;
-    private String given_name;
-    private String surname;
+    private final String given_name;
+    private final String surname;
     private boolean is_active;
-    private UserRole role;
+    private final UserRole role;
 
     public User(UUID user_id, String username, String email, String password, String given_name, String surname, boolean is_active, UserRole role) {
         this.user_id = user_id;

@@ -1,6 +1,9 @@
 package com.revature.daos;
 
-import com.revature.models.*;
+import com.revature.models.Reimbursement;
+import com.revature.models.ReimbursementStatus;
+import com.revature.models.ReimbursementType;
+import com.revature.models.User;
 import com.revature.utils.custom_exceptions.InvalidSQLException;
 import com.revature.utils.database.ConnectionFactory;
 

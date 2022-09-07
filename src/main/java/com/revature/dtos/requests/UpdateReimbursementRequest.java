@@ -1,7 +1,6 @@
 package com.revature.dtos.requests;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class UpdateReimbursementRequest {
     private String reimb_id;
