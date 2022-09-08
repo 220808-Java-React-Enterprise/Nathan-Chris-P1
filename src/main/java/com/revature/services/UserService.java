@@ -133,6 +133,7 @@ public class UserService {
     }
 
     public static void changePassword(String username, String password) {
+        validatePassword(password);
         String salt = UUID.randomUUID().toString().replace("-","");
         String hash = hashPassword(password.toCharArray(), DatatypeConverter.parseHexBinary(salt));
         User user = getUserByUsername(username);

@@ -3,6 +3,7 @@ package com.revature.servlets;
 import com.revature.dtos.requests.employee.DeleteReimbursementRequest;
 import com.revature.dtos.requests.employee.NewReimbursementRequest;
 import com.revature.dtos.requests.employee.UpdateReimbursementRequest;
+import com.revature.models.Reimbursement;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.services.ReimbursementService;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.revature.utils.ObjectMapperManager.getMapper;
 
@@ -42,7 +45,21 @@ public class EmployeeServlet extends HttpServlet {
             UserService.verifyUserRole(loginUser, UserRole.EMPLOYEE);
             resp.setStatus(200);
             resp.setContentType("application/json");
-            resp.getWriter().write(getMapper().writeValueAsString(ReimbursementService.getReimbursementsByAuthor(loginUser)));
+            List<Reimbursement> reimbursements = ReimbursementService.getReimbursementsByAuthor(loginUser);
+            if(req.getParameter("sort") != null) {
+                switch (req.getParameter("sort")){
+                    case "submitted":
+                        reimbursements.sort(Comparator.comparing(Reimbursement::getSubmitted));
+                        break;
+                    case "resolved":
+                        reimbursements.sort(Comparator.comparing(Reimbursement::getResolved));
+                        break;
+                    case "amount":
+                        reimbursements.sort(Comparator.comparing(Reimbursement::getAmount));
+                        break;
+                }
+            }
+            resp.getWriter().write(getMapper().writeValueAsString(reimbursements));
         }catch (NetworkException e){
             System.out.println(e.getMessage());
             e.printStackTrace();

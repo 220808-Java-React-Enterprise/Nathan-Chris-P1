@@ -12,7 +12,7 @@ An API for a reimbursement system.
   "password": "password",
   "given_name": "Given",
   "surname": "Surname",
-  "role": "EMLOYEE / ADMIN / FINANCE_MANAGER"
+  "role": "EMPLOYEE / ADMIN / FINANCE_MANAGER"
 }
 ```
 
