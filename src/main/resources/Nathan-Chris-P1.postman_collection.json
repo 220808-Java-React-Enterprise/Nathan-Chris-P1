@@ -416,11 +416,8 @@
 		},
 		{
 			"name": "Delete User",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [
 					{
 						"key": "Authorization",
@@ -582,6 +579,62 @@
 			"response": []
 		},
 		{
+			"name": "Finance View Reimbursement",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/finance?view=pending",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"finance"
+					],
+					"query": [
+						{
+							"key": "view",
+							"value": "pending"
+						},
+						{
+							"key": "view",
+							"value": "approved",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "food",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "Lodging",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "TRAVEL",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "otheR",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Finance Update Reimbursement",
 			"request": {
 				"method": "PUT",
@@ -592,26 +645,24 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reimb_id\":\"4d46f303-f381-41c1-8258-cfe547325112\",\n    \"status\":\"approved\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/finance/update?id=fba9a68f-07d9-44bb-99c6-21a90e89dc6a&status=APPROVED",
+					"raw": "localhost:8080/nathan-chris-p1/finance",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"nathan-chris-p1",
-						"finance",
-						"update"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "fba9a68f-07d9-44bb-99c6-21a90e89dc6a"
-						},
-						{
-							"key": "status",
-							"value": "APPROVED"
-						}
+						"finance"
 					]
 				}
 			},
