@@ -102,22 +102,7 @@ public class UserDAO implements DAO<User> {
         return users;
     }
 
-    public User getUserByUsernameAndPassword(String username, String password) {
-        try (Connection con = ConnectionFactory.getInstance().getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM ers_users WHERE username = ? AND password = ?")){
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return getRow(rs);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
-        }
-        return null;
-    }
-
-    public boolean isUsernameAvailable(String username) {
+    public boolean isUsernameTaken(String username) {
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT username FROM ers_users WHERE username = ?")){
             ps.setString(1, username);
@@ -190,7 +175,7 @@ public class UserDAO implements DAO<User> {
         return users;
     }
 
-    public boolean isEmailAvailable(String email) {
+    public boolean isEmailTaken(String email) {
         try (Connection con = ConnectionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT email FROM ers_users WHERE email = ?")){
             ps.setString(1, email);

@@ -10,7 +10,6 @@ import com.revature.utils.custom_exceptions.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -60,13 +59,13 @@ public class UserService {
     }
 
     public static void checkAvailableUsername(String username) throws ResourceConflictException {
-        if (userDAO.isUsernameAvailable(username)){
+        if (userDAO.isUsernameTaken(username)){
             throw new ResourceConflictException("Username is already taken, please choose another.");
         }
     }
 
     public static void checkAvailableEmail(String email) throws ResourceConflictException {
-        if (userDAO.isEmailAvailable(email)){
+        if (userDAO.isEmailTaken(email)){
             throw new ResourceConflictException("Email is already taken, please choose another.");
         }
     }
