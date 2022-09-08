@@ -9,64 +9,275 @@
 		{
 			"name": "New Admin User",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"koukaakiva\",\n    \"email\": \"koukaakiva@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Chris\",\n    \"surname\": \"Waters\",\n    \"role\": \"ADMIN\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/nathan-chris-p1/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"signup"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "New Employee User",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"christhewizard\",\n    \"email\": \"christhewizard@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Chris\",\n    \"surname\": \"The Wizard\",\n    \"role\": \"EMPLOYEE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"signup"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "New Employee User 2",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"nathanthegreat\",\n    \"email\": \"nathanthegreat@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Nathan\",\n    \"surname\": \"The Great\",\n    \"role\": \"EMPLOYEE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"signup"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "New Finance Manager",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"baowow\",\n    \"email\": \"baowow@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Bao\",\n    \"surname\": \"Wow\",\n    \"role\": \"FINANCE_MANAGER\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"signup"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var value = pm.response.headers.get(\"Authorization\");",
+							"postman.setEnvironmentVariable(\"authkey\", value);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"koukaakiva\",\n    \"password\": \"fnord\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Employee Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var value = pm.response.headers.get(\"Authorization\");",
+							"postman.setEnvironmentVariable(\"authkey\", value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"christhewizard\",\n    \"password\": \"plop\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Employee Login 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var value = pm.response.headers.get(\"Authorization\");",
+							"postman.setEnvironmentVariable(\"authkey\", value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"nathanthegreat\",\n    \"password\": \"fnord\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Finance Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var value = pm.response.headers.get(\"Authorization\");",
+							"postman.setEnvironmentVariable(\"authkey\", value);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"baowow\",\n    \"password\": \"fnord\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
@@ -74,39 +285,203 @@
 			"name": "View Users",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"admin"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "koukaakiva",
+							"disabled": true
+						},
+						{
+							"key": "user",
+							"value": "fakeuser",
+							"disabled": true
+						},
+						{
+							"key": "active",
+							"value": "truE",
+							"disabled": true
+						},
+						{
+							"key": "active",
+							"value": "false",
+							"disabled": true
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Update A/D User",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"koukaakiva\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"admin"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "activate",
+							"disabled": true
+						},
+						{
+							"key": "action",
+							"value": "deactivate",
+							"disabled": true
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Reset User Password",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"christhewizard\",\n    \"password\":\"plop\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/admin?action=password",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"admin"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "password"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Delete User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"christhewizard\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"admin"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "New Reimbursement",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\":\"600\",\n    \"description\":\"I can has cheezburger?\",\n    \"payment_id\":\"3cb74ef5-1746-4921-8f82-ecb8d9858311\",\n    \"type\":\"food\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/employee",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"employee"
+					]
+				}
 			},
 			"response": []
 		},
@@ -114,31 +489,131 @@
 			"name": "View Reimbursements",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"employee",
+						"reimbursement"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Update Reimbursement",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reimb_id\":\"516f5b82-7f1d-4e50-8d25-1738f9f8be71\",\n    \"amount\":\"950\",\n    \"description\":\"Super Hilton\",\n    \"payment_id\":\"3cb74ef5-1746-4921-8f82-ecb8d9858311\",\n    \"type\":\"LODGING\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"employee",
+						"reimbursement"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Delete Reimbursement",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reimb_id\":\"fba9a68f-07d9-44bb-99c6-21a90e89dc6a\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"employee",
+						"reimbursement"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Finance Update Reimbursement",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authkey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/nathan-chris-p1/finance/update?id=fba9a68f-07d9-44bb-99c6-21a90e89dc6a&status=APPROVED",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nathan-chris-p1",
+						"finance",
+						"update"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "fba9a68f-07d9-44bb-99c6-21a90e89dc6a"
+						},
+						{
+							"key": "status",
+							"value": "APPROVED"
+						}
+					]
+				}
 			},
 			"response": []
 		}

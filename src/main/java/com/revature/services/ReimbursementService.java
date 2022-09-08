@@ -4,6 +4,7 @@ import com.revature.daos.ReimbursementDAO;
 import com.revature.dtos.requests.employee.DeleteReimbursementRequest;
 import com.revature.dtos.requests.employee.NewReimbursementRequest;
 import com.revature.dtos.requests.employee.UpdateReimbursementRequest;
+import com.revature.dtos.requests.finanace.UpdateReimbursementStatusRequest;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.ReimbursementType;
@@ -35,11 +36,13 @@ public class ReimbursementService {
                 userID,
                 null,
                 ReimbursementStatus.PENDING,
-                ReimbursementType.valueOf(request.getType())
+                ReimbursementType.valueOf(request.getType().toUpperCase())
         ));
     }
 
     public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID){
+        if(getReimbursementById(request.getReimb_id()) == null)
+            throw new BadRequestException("No Reimbursement of with that ID exists.");
         reimbDAO.update(new Reimbursement(
                 UUID.fromString(request.getReimb_id()),
                 request.getAmount(),
@@ -84,16 +87,16 @@ public class ReimbursementService {
         }
     }
 
-    public static void updateReimbursement(String id, User manager, String status) throws NetworkException {
+    public static void updateReimbursement(User manager, UpdateReimbursementStatusRequest request) throws NetworkException {
         try {
-            if (id == null || id.isEmpty()) throw new BadRequestException("No id given.");
-            Reimbursement reimb = ReimbursementService.getReimbursementById(id);
+            if (request.getReimb_id() == null || request.getReimb_id().isEmpty()) throw new BadRequestException("No id given.");
+            Reimbursement reimb = ReimbursementService.getReimbursementById(request.getReimb_id());
             if (reimb == null) throw new NotFoundException("No reimbursement was found with that id.");
             if (reimb.getStatus_id() != ReimbursementStatus.PENDING)
                 throw new ForbiddenException("Finance managers are only allowed to change Pending requests.");
             reimb.setResolved(Timestamp.from(Instant.now()));
             reimb.setResolver(manager.getUserID());
-            reimb.setStatus(ReimbursementStatus.valueOf(status));
+            reimb.setStatus(ReimbursementStatus.valueOf(request.getStatus().toUpperCase()));
             reimbDAO.setStatus(reimb);
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");

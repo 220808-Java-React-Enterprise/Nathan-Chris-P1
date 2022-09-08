@@ -2,8 +2,9 @@ package com.revature.utils;
 
 import com.revature.servlets.LoginServlet;
 import com.revature.servlets.SignupServlet;
-import com.revature.servlets.admin.UsersServlet;
-import com.revature.servlets.finance.ReimbursementServlet;
+import com.revature.servlets.admin.AdminServlet;
+import com.revature.servlets.employee.EmployeeServlet;
+import com.revature.servlets.finance.FinanceServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -16,9 +17,9 @@ public class ContextLoaderListener implements ServletContextListener {
 
         servletContext.addServlet("SignupServlet", new SignupServlet()).addMapping("/signup");
         servletContext.addServlet("LoginServlet", new LoginServlet()).addMapping("/login");
-        servletContext.addServlet("AdminServlet", new UsersServlet()).addMapping("/admin");
-        servletContext.addServlet("ManagerServlet", new ReimbursementServlet()).addMapping("/finance");
-        servletContext.addServlet("EmployeeServlet", new com.revature.servlets.employee.ReimbursementServlet()).addMapping("/employee");
+        servletContext.addServlet("AdminServlet", new AdminServlet()).addMapping("/admin");
+        servletContext.addServlet("ManagerServlet", new FinanceServlet()).addMapping("/finance");
+        servletContext.addServlet("EmployeeServlet", new EmployeeServlet()).addMapping("/employee");
     }
 
     @Override

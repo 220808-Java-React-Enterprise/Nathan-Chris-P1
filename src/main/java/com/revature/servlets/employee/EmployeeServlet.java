@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static com.revature.utils.ObjectMapperManager.getMapper;
 
-public class ReimbursementServlet extends HttpServlet {
+public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{

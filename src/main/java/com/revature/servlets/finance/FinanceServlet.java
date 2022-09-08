@@ -1,5 +1,6 @@
 package com.revature.servlets.finance;
 
+import com.revature.dtos.requests.finanace.UpdateReimbursementStatusRequest;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.User;
@@ -9,18 +10,15 @@ import com.revature.services.TokenService;
 import com.revature.services.UserService;
 import com.revature.utils.custom_exceptions.BadRequestException;
 import com.revature.utils.custom_exceptions.NetworkException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
 import static com.revature.utils.ObjectMapperManager.getMapper;
 
-public class ReimbursementServlet extends HttpServlet {
+public class FinanceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -46,15 +44,14 @@ public class ReimbursementServlet extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
+        try{
             User loginUser = TokenService.extractRequesterDetails(req);
             UserService.verifyUserRole(loginUser, UserRole.FINANCE_MANAGER);
-            String id = req.getParameter("id");
-            String status = req.getParameter("status");
-            ReimbursementService.updateReimbursement(id, loginUser, status);
+            UpdateReimbursementStatusRequest request = getMapper().readValue(req.getInputStream(), UpdateReimbursementStatusRequest.class);
+            ReimbursementService.updateReimbursement(loginUser, request);
             resp.setStatus(200);
             resp.setContentType("application/json");
-        } catch (NetworkException e) {
+        }catch (NetworkException e){
             System.out.println(e.getMessage());
             e.printStackTrace();
             resp.setStatus(e.getStatusCode());
