@@ -52,7 +52,10 @@ An API for a reimbursement system.
 
 * Approve or deny a reimbursement by sending a PUT request to http://3.140.254.10:8080/nathan-chris-p1/finance with a valid Finance Manager Authentication Token and the following JSON form:
 ```json
-
+{
+    "reimb_id":"UUID of the reimbursement to update",
+    "status":"APPROVED / DENIED"
+}
 ```
 
 * Request a reimbursement by sending a POST request to http://3.140.254.10:8080/nathan-chris-p1/employee with a valid Employee Authentication Token and the following JSON form:
