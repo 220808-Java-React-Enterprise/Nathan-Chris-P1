@@ -72,7 +72,6 @@ public class ReimbursementService {
             ReimbursementType rType = (type == null ? ReimbursementType.NULL : ReimbursementType.valueOf(type));
             return reimbDAO.getByManagerAndType(manager, rType);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -83,7 +82,6 @@ public class ReimbursementService {
             ReimbursementStatus rStatus = (status == null ? ReimbursementStatus.NULL : ReimbursementStatus.valueOf(status));
             return reimbDAO.getByTypeAndStatus(rType, rStatus);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -107,7 +105,7 @@ public class ReimbursementService {
     public static void verifyCanModify(String reimb_id, UUID userID){
         Reimbursement reimbursement = getReimbursementById(reimb_id);
         if(reimbursement == null)
-            throw new BadRequestException("Can not delete reimbursement that does not exit.");
+            throw new NotFoundException("Can not delete reimbursement that does not exit.");
         if(!reimbursement.getAuthor_id().equals(userID))
             throw new ForbiddenException("Unauthorized Reimbursement Modification. Employees can only modify their own reimbursements.");
         if(!reimbursement.getStatus_id().equals(ReimbursementStatus.PENDING))
