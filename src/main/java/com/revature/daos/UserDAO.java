@@ -189,4 +189,18 @@ public class UserDAO implements DAO<User> {
         }
         return users;
     }
+
+    public boolean isEmailAvailable(String email) {
+        try (Connection con = ConnectionFactory.getInstance().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT email FROM ers_users WHERE email = ?")){
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new InvalidSQLException("An error occurred when tyring to read from the database.");
+        }
+        return false;
+    }
 }

@@ -170,6 +170,16 @@ public class UserServiceTest {
         verify(mockDAO, times(1)).isUsernameAvailable(any());
     }
 
+    @Test
+    public void test_checkAvailableEmail_Succeed(){
+        UserDAO mockDAO = mock(UserDAO.class);
+        new UserService(mockDAO);
+        String email = "christhewizard@gmail.com";
+        when(mockDAO.isUsernameAvailable(any())).thenReturn(false);
+        UserService.checkAvailableEmail(email);
+        verify(mockDAO, times(1)).isEmailAvailable(any());
+    }
+
     @Test(expected = ResourceConflictException.class)
     public void test_checkAvailableUsername_Fail(){
         UserDAO mockDAO = mock(UserDAO.class);
