@@ -40,23 +40,27 @@ public class ReimbursementService {
         ));
     }
 
-    public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID){
-        Reimbursement reimb = getReimbursementById(request.getReimb_id()); 
-        if(reimb == null)
-            throw new BadRequestException("No Reimbursement with that ID exists.");
-        reimbDAO.update(new Reimbursement(
-                UUID.fromString(request.getReimb_id()),
-                request.getAmount(),
-                reimb.getSubmitted(),
-                null,
-                request.getDescription(),
-                null,
-                UUID.fromString(request.getPayment_id()),
-                userID,
-                null,
-                ReimbursementStatus.PENDING,
-                ReimbursementType.valueOf(request.getType())
-        ));
+    public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID) {
+        try {
+            Reimbursement reimb = getReimbursementById(request.getReimb_id());
+            if (reimb == null)
+                throw new BadRequestException("No Reimbursement with that ID exists.");
+            reimbDAO.update(new Reimbursement(
+                    UUID.fromString(request.getReimb_id()),
+                    request.getAmount(),
+                    reimb.getSubmitted(),
+                    null,
+                    request.getDescription(),
+                    null,
+                    UUID.fromString(request.getPayment_id()),
+                    userID,
+                    null,
+                    ReimbursementStatus.PENDING,
+                    ReimbursementType.valueOf(request.getType().toUpperCase())
+            ));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status");
+        }
     }
 
     public static Reimbursement getReimbursementById(String id) {

@@ -7,10 +7,7 @@ import com.revature.dtos.requests.admin.DeleteUserRequest;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.utils.custom_exceptions.*;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -165,9 +162,19 @@ public class UserServiceTest {
         UserDAO mockDAO = mock(UserDAO.class);
         new UserService(mockDAO);
         String username = "christhewizard";
-        when(mockDAO.isUsernameAvailable(any())).thenReturn(false);
+        when(mockDAO.isUsernameTaken(any())).thenReturn(false);
         UserService.checkAvailableUsername(username);
-        verify(mockDAO, times(1)).isUsernameAvailable(any());
+        verify(mockDAO, times(1)).isUsernameTaken(any());
+    }
+
+    @Test
+    public void test_checkAvailableEmail_Succeed(){
+        UserDAO mockDAO = mock(UserDAO.class);
+        new UserService(mockDAO);
+        String email = "christhewizard@gmail.com";
+        when(mockDAO.isUsernameTaken(any())).thenReturn(false);
+        UserService.checkAvailableEmail(email);
+        verify(mockDAO, times(1)).isEmailTaken(any());
     }
 
     @Test(expected = ResourceConflictException.class)
@@ -175,9 +182,9 @@ public class UserServiceTest {
         UserDAO mockDAO = mock(UserDAO.class);
         new UserService(mockDAO);
         String username = "christhewizard";
-        when(mockDAO.isUsernameAvailable(any())).thenReturn(true);
+        when(mockDAO.isUsernameTaken(any())).thenReturn(true);
         UserService.checkAvailableUsername(username);
-        verify(mockDAO, times(1)).isUsernameAvailable(any());
+        verify(mockDAO, times(1)).isUsernameTaken(any());
     }
 
     @Test
