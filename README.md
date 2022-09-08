@@ -41,13 +41,6 @@ An API for a reimbursement system.
 }
 ```
 
-* Delete a user account by sending a DELETE request to http://3.140.254.10:8080/nathan-chris-p1/admin with a valid Admin Authentication Token and the following JSON form:
-```json
-{
-    "username":"username"
-}
-```
-
 * Get a list of reimbursements by sending a GET request to http://3.140.254.10:8080/nathan-chris-p1/finance with a valid Finance Manager Authentication Token and the view parameter set to "pending" or "resolved". Results can be filtered using the type parameter.<br/>
 
 * Approve or deny a reimbursement by sending a PUT request to http://3.140.254.10:8080/nathan-chris-p1/finance with a valid Finance Manager Authentication Token and the following JSON form:
