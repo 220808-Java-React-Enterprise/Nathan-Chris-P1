@@ -41,6 +41,8 @@ public class ReimbursementService {
     }
 
     public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID){
+        if(getReimbursementById(request.getReimb_id()) == null)
+            throw new BadRequestException("No Reimbursement of with that ID exists.");
         reimbDAO.update(new Reimbursement(
                 UUID.fromString(request.getReimb_id()),
                 request.getAmount(),
