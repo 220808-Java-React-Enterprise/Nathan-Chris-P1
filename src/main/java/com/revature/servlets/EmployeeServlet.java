@@ -1,4 +1,4 @@
-package com.revature.servlets.employee;
+package com.revature.servlets;
 
 import com.revature.dtos.requests.employee.DeleteReimbursementRequest;
 import com.revature.dtos.requests.employee.NewReimbursementRequest;

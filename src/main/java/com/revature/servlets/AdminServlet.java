@@ -1,4 +1,4 @@
-package com.revature.servlets.admin;
+package com.revature.servlets;
 
 import com.revature.dtos.requests.admin.ActivateUserRequest;
 import com.revature.dtos.requests.admin.DeactivateUserRequest;

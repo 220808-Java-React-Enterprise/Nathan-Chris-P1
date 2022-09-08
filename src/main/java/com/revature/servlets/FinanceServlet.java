@@ -1,4 +1,4 @@
-package com.revature.servlets.finance;
+package com.revature.servlets;
 
 import com.revature.dtos.requests.finanace.UpdateReimbursementStatusRequest;
 import com.revature.models.Reimbursement;

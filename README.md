@@ -128,6 +128,7 @@ As an Employee I want to view my pending reimbursement request so that I can ver
   * Miscellaneous Code
 * Nathan Gilbert
   * Coded bulk of Finance Manager classes
+  * Coded Network Exception System
   * Wrote SQL for structuring Database
   * Coded JUNIT Testing
   * Automated Postman Authentication Token handling
