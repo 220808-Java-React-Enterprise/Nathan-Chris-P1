@@ -2,9 +2,9 @@ package com.revature.utils;
 
 import com.revature.servlets.LoginServlet;
 import com.revature.servlets.SignupServlet;
-import com.revature.servlets.admin.AdminServlet;
-import com.revature.servlets.employee.EmployeeServlet;
-import com.revature.servlets.finance.FinanceServlet;
+import com.revature.servlets.AdminServlet;
+import com.revature.servlets.EmployeeServlet;
+import com.revature.servlets.FinanceServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

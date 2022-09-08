@@ -12,7 +12,7 @@ An API for a reimbursement system.
   "password": "password",
   "given_name": "Given",
   "surname": "Surname",
-  "role": "EMLOYEE / ADMIN / FINANCE_MANAGER"
+  "role": "EMPLOYEE / ADMIN / FINANCE_MANAGER"
 }
 ```
 
@@ -52,7 +52,10 @@ An API for a reimbursement system.
 
 * Approve or deny a reimbursement by sending a PUT request to http://3.140.254.10:8080/nathan-chris-p1/finance with a valid Finance Manager Authentication Token and the following JSON form:
 ```json
-
+{
+    "reimb_id":"UUID of the reimbursement to update",
+    "status":"APPROVED / DENIED"
+}
 ```
 
 * Request a reimbursement by sending a POST request to http://3.140.254.10:8080/nathan-chris-p1/employee with a valid Employee Authentication Token and the following JSON form:
@@ -128,6 +131,7 @@ As an Employee I want to view my pending reimbursement request so that I can ver
   * Miscellaneous Code
 * Nathan Gilbert
   * Coded bulk of Finance Manager classes
+  * Coded Network Exception System
   * Wrote SQL for structuring Database
   * Coded JUNIT Testing
   * Automated Postman Authentication Token handling
