@@ -4,7 +4,7 @@ import com.revature.daos.ReimbursementDAO;
 import com.revature.dtos.requests.employee.DeleteReimbursementRequest;
 import com.revature.dtos.requests.employee.NewReimbursementRequest;
 import com.revature.dtos.requests.employee.UpdateReimbursementRequest;
-import com.revature.dtos.requests.finanace.UpdateReimbursementStatusRequest;
+import com.revature.dtos.requests.finance.UpdateReimbursementStatusRequest;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.ReimbursementType;
@@ -41,12 +41,13 @@ public class ReimbursementService {
     }
 
     public static void updateReimbursement(UpdateReimbursementRequest request, UUID userID){
-        if(getReimbursementById(request.getReimb_id()) == null)
-            throw new BadRequestException("No Reimbursement of with that ID exists.");
+        Reimbursement reimb = getReimbursementById(request.getReimb_id()); 
+        if(reimb == null)
+            throw new BadRequestException("No Reimbursement with that ID exists.");
         reimbDAO.update(new Reimbursement(
                 UUID.fromString(request.getReimb_id()),
                 request.getAmount(),
-                reimbDAO.getByKey(request.getReimb_id()).getSubmitted(),
+                reimb.getSubmitted(),
                 null,
                 request.getDescription(),
                 null,
@@ -71,7 +72,6 @@ public class ReimbursementService {
             ReimbursementType rType = (type == null ? ReimbursementType.NULL : ReimbursementType.valueOf(type));
             return reimbDAO.getByManagerAndType(manager, rType);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -82,7 +82,6 @@ public class ReimbursementService {
             ReimbursementStatus rStatus = (status == null ? ReimbursementStatus.NULL : ReimbursementStatus.valueOf(status));
             return reimbDAO.getByTypeAndStatus(rType, rStatus);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -106,7 +105,7 @@ public class ReimbursementService {
     public static void verifyCanModify(String reimb_id, UUID userID){
         Reimbursement reimbursement = getReimbursementById(reimb_id);
         if(reimbursement == null)
-            throw new BadRequestException("Can not delete reimbursement that does not exit.");
+            throw new NotFoundException("Can not delete reimbursement that does not exit.");
         if(!reimbursement.getAuthor_id().equals(userID))
             throw new ForbiddenException("Unauthorized Reimbursement Modification. Employees can only modify their own reimbursements.");
         if(!reimbursement.getStatus_id().equals(ReimbursementStatus.PENDING))

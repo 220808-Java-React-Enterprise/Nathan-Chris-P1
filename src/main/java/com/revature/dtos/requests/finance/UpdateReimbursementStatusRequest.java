@@ -1,4 +1,4 @@
-package com.revature.dtos.requests.finanace;
+package com.revature.dtos.requests.finance;
 
 public class UpdateReimbursementStatusRequest {
     String reimb_id;
