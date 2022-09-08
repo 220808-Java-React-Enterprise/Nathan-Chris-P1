@@ -1,6 +1,6 @@
 package com.revature.servlets;
 
-import com.revature.dtos.requests.finanace.UpdateReimbursementStatusRequest;
+import com.revature.dtos.requests.finance.UpdateReimbursementStatusRequest;
 import com.revature.models.Reimbursement;
 import com.revature.models.ReimbursementStatus;
 import com.revature.models.User;
