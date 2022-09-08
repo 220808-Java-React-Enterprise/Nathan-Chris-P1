@@ -34,7 +34,7 @@ public class UserService {
             throw new InvalidRequestException("Password must be between 5 and 30 alphanumeric or special characters.");
     }
     
-    public static User registerUser(NewUserRequest request){
+    public static void registerUser(NewUserRequest request){
         validateUsername(request.getUsername());
         validatePassword(request.getPassword());
         checkAvailableUsername(request.getUsername());
@@ -49,10 +49,9 @@ public class UserService {
                     request.getGiven_name(),
                     request.getSurname(),
                     false,
-                    UserRole.valueOf(request.getRole())
+                    UserRole.valueOf(request.getRole().toUpperCase())
                 )
         );
-        return null;
     }
 
     public static User getUserByUsername(String username) {
@@ -70,9 +69,7 @@ public class UserService {
             SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
             KeySpec ks = new PBEKeySpec(password, salt, 1024, 128);
             return DatatypeConverter.printHexBinary(f.generateSecret(ks).getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
