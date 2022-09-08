@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"koukaakiva\",\n    \"email\": \"koukaakiva@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Chris\",\n    \"surname\": \"Waters\",\n    \"role\": \"ADMIN\"\n}",
+					"raw": "{\n    \"username\": \"baowow\",\n    \"email\": \"baowow@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Bao\",\n    \"surname\": \"Wow\",\n    \"role\": \"ADMIN\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,14 +21,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/nathan-chris-p1/signup",
-					"protocol": "http",
+					"raw": "{{url}}/signup",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"signup"
 					]
 				}
@@ -50,13 +47,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"raw": "{{url}}/signup",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"signup"
 					]
 				}
@@ -78,13 +73,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"raw": "{{url}}/signup",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"signup"
 					]
 				}
@@ -98,7 +91,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"baowow\",\n    \"email\": \"baowow@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Bao\",\n    \"surname\": \"Wow\",\n    \"role\": \"FINANCE_MANAGER\"\n}",
+					"raw": "{\n    \"username\": \"picklerick\",\n    \"email\": \"picklerick@gmail.com\",\n    \"password\": \"fnord\",\n    \"given_name\": \"Pickle\",\n    \"surname\": \"Rick\",\n    \"role\": \"FINANCE_MANAGER\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -106,13 +99,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/signup",
+					"raw": "{{url}}/signup",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"signup"
 					]
 				}
@@ -147,13 +138,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/login",
+					"raw": "{{url}}/login",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"login"
 					]
 				}
@@ -179,7 +168,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"christhewizard\",\n    \"password\": \"plop\"\n}",
+					"raw": "{\n    \"username\": \"activeuser\",\n    \"password\": \"fnord\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -187,13 +176,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/login",
+					"raw": "{{url}}/login",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"login"
 					]
 				}
@@ -219,7 +206,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"nathanthegreat\",\n    \"password\": \"fnord\"\n}",
+					"raw": "{\n    \"username\": \"inactiveuser\",\n    \"password\": \"fnord\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -227,13 +214,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/login",
+					"raw": "{{url}}/login",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"login"
 					]
 				}
@@ -260,7 +245,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"baowow\",\n    \"password\": \"fnord\"\n}",
+					"raw": "{\n    \"username\": \"tahg\",\n    \"password\": \"fnord\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -268,13 +253,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/login",
+					"raw": "{{url}}/login",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"login"
 					]
 				}
@@ -293,13 +276,11 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"raw": "{{url}}/admin",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"admin"
 					],
 					"query": [
@@ -341,7 +322,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"koukaakiva\"\n}",
+					"raw": "{\n    \"username\":\"picklerick\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -349,20 +330,17 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"raw": "{{url}}/admin?action=activate",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"admin"
 					],
 					"query": [
 						{
 							"key": "action",
-							"value": "activate",
-							"disabled": true
+							"value": "activate"
 						},
 						{
 							"key": "action",
@@ -387,7 +365,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"christhewizard\",\n    \"password\":\"plop\"\n}",
+					"raw": "{\n    \"username\":\"tahg\",\n    \"password\":\"fnord\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -395,13 +373,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/admin?action=password",
+					"raw": "{{url}}/admin?action=password",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"admin"
 					],
 					"query": [
@@ -435,13 +411,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/admin",
+					"raw": "{{url}}/admin",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"admin"
 					]
 				}
@@ -469,13 +443,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/employee",
+					"raw": "{{url}}/employee",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"employee"
 					]
 				}
@@ -494,15 +466,29 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"raw": "{{url}}/employee",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
-						"employee",
-						"reimbursement"
+						"employee"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "amount",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "submitted",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "resolved",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -521,7 +507,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"reimb_id\":\"516f5b82-7f1d-4e50-8d25-1738f9f8be71\",\n    \"amount\":\"950\",\n    \"description\":\"Super Hilton\",\n    \"payment_id\":\"3cb74ef5-1746-4921-8f82-ecb8d9858311\",\n    \"type\":\"LODGING\"\n}",
+					"raw": "{\n    \"reimb_id\":\"7d8cdf6f-65a2-4f46-a5e9-1938340af537\",\n    \"amount\":\"60\",\n    \"description\":\"I can has cheezburger?\",\n    \"payment_id\":\"3cb74ef5-1746-4921-8f82-ecb8d9858311\",\n    \"type\":\"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -529,15 +515,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"raw": "{{url}}/employee",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
-						"employee",
-						"reimbursement"
+						"employee"
 					]
 				}
 			},
@@ -556,7 +539,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"reimb_id\":\"fba9a68f-07d9-44bb-99c6-21a90e89dc6a\"\n}",
+					"raw": "{\n    \"reimb_id\":\"7d8cdf6f-65a2-4f46-a5e9-1938340af537\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -564,15 +547,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/employee/reimbursement",
+					"raw": "{{url}}/employee",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
-						"employee",
-						"reimbursement"
+						"employee"
 					]
 				}
 			},
@@ -590,13 +570,11 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/finance?view=pending",
+					"raw": "{{url}}/finance?view=pending",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"finance"
 					],
 					"query": [
@@ -606,7 +584,7 @@
 						},
 						{
 							"key": "view",
-							"value": "approved",
+							"value": "resolved",
 							"disabled": true
 						},
 						{
@@ -647,7 +625,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"reimb_id\":\"4d46f303-f381-41c1-8258-cfe547325112\",\n    \"status\":\"approved\"\n}",
+					"raw": "{\n    \"reimb_id\":\"c08acb95-916a-4b79-872d-f2f889a7f3a6\",\n    \"status\":\"approved\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -655,13 +633,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/nathan-chris-p1/finance",
+					"raw": "{{url}}/finance",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8080",
 					"path": [
-						"nathan-chris-p1",
 						"finance"
 					]
 				}
